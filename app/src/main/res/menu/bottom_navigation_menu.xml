@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+
+    <item android:id="@+id/dashboardFragment"
+        android:title="@string/dashboard"
+        android:icon="@drawable/ana_ekran_icon"/>
+
+    <item android:id="@+id/categoryFragment"
+        android:title="@string/category"
+        android:icon="@drawable/kategori_icon"/>
+
+    <item android:id="@+id/habitFragment"
+        android:title=""
+        android:icon="@drawable/add_icon"/>
+
+    <item android:id="@+id/motivationFragment"
+        android:title="@string/motivation"
+        android:icon="@drawable/motivasyon_icon"/>
+
+    <item android:id="@+id/profileFragment"
+        android:title="@string/profile"
+        android:icon="@drawable/profil_icon"/>
+
+</menu>

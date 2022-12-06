@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "318115625526",
+    "project_id": "aliskanlik-dac50",
+    "storage_bucket": "aliskanlik-dac50.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:318115625526:android:7fc356a66f0f89b993b697",
+        "android_client_info": {
+          "package_name": "com.woynapp.aliskanlik"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "318115625526-9hfk3hi0gnv84vabammnpc0doausqovk.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC4u5a3MkvEuItztyeXhzgrX4SJ0NZCZz0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "318115625526-9hfk3hi0gnv84vabammnpc0doausqovk.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

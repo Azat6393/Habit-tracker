@@ -1,0 +1,14 @@
+<resources>
+    <string name="app_name">Aliskanlik</string>
+    <string name="dashboard">Dashboard</string>
+    <string name="category">Category</string>
+    <string name="motivation">Motivation</string>
+    <string name="profile">Profile</string>
+    <string name="hello">Hello,</string>
+    <string name="my_habits">My habits</string>
+    <string name="new_text">New</string>
+    <string name="add_habit">Add habit</string>
+    <string name="habit_name">Habit name</string>
+    <string name="habit_description">Habit description</string>
+    <string name="days">Days:</string>
+</resources>

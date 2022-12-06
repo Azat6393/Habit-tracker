@@ -1,0 +1,26 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <!-- Base application theme. -->
+    <style name="Theme.Aliskanlik" parent="Theme.MaterialComponents.DayNight.DarkActionBar">
+        <!-- Primary brand color. -->
+        <item name="colorPrimary">@color/purple_200</item>
+        <item name="colorPrimaryVariant">@color/purple_700</item>
+        <item name="colorOnPrimary">@color/black</item>
+        <!-- Secondary brand color. -->
+        <item name="colorSecondary">@color/teal_200</item>
+        <item name="colorSecondaryVariant">@color/teal_200</item>
+        <item name="colorOnSecondary">@color/black</item>
+        <!-- Status bar color. -->
+        <item name="android:statusBarColor">?attr/colorPrimaryVariant</item>
+        <!-- Customize your theme here. -->
+
+        <item name="primary_color">@color/dark_primary</item>
+        <item name="secondary_color">@color/dark_secondary</item>
+        <item name="tertiary_color">@color/dark_tertiary</item>
+        <item name="surface_color">@color/dark_surface</item>
+        <item name="background_color">@color/dark_background</item>
+        <item name="red">@color/red</item>
+        <item name="green">@color/green</item>
+        <item name="background">@color/light_background_color</item>
+
+    </style>
+</resources>
