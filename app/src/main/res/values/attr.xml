@@ -8,6 +8,6 @@
         <attr name="background_color" format="color"/>
         <attr name="red" format="color"/>
         <attr name="green" format="color"/>
-        <attr name="background" format="color"/>
+        <attr name="background_color_light" format="color"/>
     </declare-styleable>
 </resources>

@@ -10,5 +10,14 @@
     <string name="add_habit">Add habit</string>
     <string name="habit_name">Habit name</string>
     <string name="habit_description">Habit description</string>
-    <string name="days">Days:</string>
+    <string name="dark_mode">Dark mode</string>
+    <string name="about_us">About us</string>
+    <string name="website">App website</string>
+    <string name="sign_out">Sign out</string>
+    <string name="term_of_service">Term of service</string>
+    <string name="privacy_policy">Privacy policy</string>
+    <string name="save">Save</string>
+    <string name="total">Total</string>
+    <string name="category_name">Category name</string>
+    <string name="done">Done</string>
 </resources>

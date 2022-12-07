@@ -19,13 +19,9 @@ class AddHabitFragment : Fragment(R.layout.fragment_add_habit) {
         super.onViewCreated(view, savedInstanceState)
         _binding = FragmentAddHabitBinding.bind(view)
 
-        val emojiView = AXSingleEmojiView(requireContext())
 
         _binding.daysSeekBar.setOnSeekBarChangeListener(onSeekbarChangeListener)
-        _binding.layout.initPopupView(emojiView)
-        _binding.layout.toggle() // Toggles visibility of the Popup.
-        _binding.layout.show() // Shows the Popup.
-        _binding.layout.isShowing
+
     }
 
     private val onSeekbarChangeListener = object : SeekBar.OnSeekBarChangeListener {

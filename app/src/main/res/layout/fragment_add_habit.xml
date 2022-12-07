@@ -88,7 +88,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/days"
+                android:text="days"
                 android:textColor="?attr/secondary_color"
                 android:textSize="16sp" />
 
@@ -114,12 +114,14 @@
         android:layout_marginEnd="10dp"
         android:layout_marginStart="10dp"
         android:max="120"
+        android:min="21"
         android:progress="21"
         android:progressTint="?attr/primary_color"
         android:progressBackgroundTint="?attr/primary_color"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/materialCardView" />
+        app:layout_constraintTop_toBottomOf="@+id/materialCardView"
+        tools:targetApi="o" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline2"
