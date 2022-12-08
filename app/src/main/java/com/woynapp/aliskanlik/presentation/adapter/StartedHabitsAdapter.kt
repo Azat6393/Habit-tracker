@@ -5,6 +5,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.woynapp.aliskanlik.core.utils.getDaysDetail
 import com.woynapp.aliskanlik.databinding.ItemStartedHabitBinding
 import com.woynapp.aliskanlik.domain.model.Habit
 
@@ -31,22 +32,23 @@ class StartedHabitsAdapter(private val listener: AdapterItemListener<Habit>) :
         init {
             _binding.root.setOnClickListener {
                 val position = absoluteAdapterPosition
-                if (position != RecyclerView.NO_POSITION){
+                if (position != RecyclerView.NO_POSITION) {
                     val item = getItem(position)
-                    if (item != null){
+                    if (item != null) {
                         listener.onClick(item)
                     }
                 }
             }
         }
 
-        fun bind(item: Habit){
+        fun bind(item: Habit) {
             _binding.apply {
                 nameTv.text = item.name
                 totalTv.text = item.days.size.toString()
                 val doneList = item.days.filter { it }
-
+                val mistakeList = getDaysDetail(item.days, item.started_date!!).filter { it == 2 }
                 doneTv.text = doneList.size.toString()
+                mistakeTv.text = mistakeList.size.toString()
             }
         }
     }

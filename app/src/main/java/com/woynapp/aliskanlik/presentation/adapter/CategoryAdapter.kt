@@ -59,9 +59,15 @@ class CategoryAdapter(private val listener: CategoryItemListener) :
                 if (position != RecyclerView.NO_POSITION) {
                     val item = getItem(position)
                     if (item != null) {
-                        selectedItemPosition = position
-                        listener.onClick(item)
-                        notifyDataSetChanged()
+                        if (selectedItemPosition == position){
+                            selectedItemPosition = null
+                            listener.onClick(item)
+                            notifyDataSetChanged()
+                        }else {
+                            selectedItemPosition = position
+                            listener.onClick(item)
+                            notifyDataSetChanged()
+                        }
                     }
                 }
             }

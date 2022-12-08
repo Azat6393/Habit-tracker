@@ -42,4 +42,8 @@ class CategoryViewModel @Inject constructor(
             _habits.value = it
         }.launchIn(viewModelScope)
     }
+
+    fun updateHabit(habit: Habit) = viewModelScope.launch {
+        repo.updateHabit(habit)
+    }
 }

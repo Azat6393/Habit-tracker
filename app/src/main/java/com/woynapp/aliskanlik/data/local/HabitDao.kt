@@ -28,6 +28,9 @@ interface HabitDao {
     @Query("SELECT * FROM habit WHERE started = 0")
     fun getAllHabits(): Flow<List<Habit>>
 
+    @Query("SELECT * FROM habit WHERE id = :id")
+    fun getHabitById(id: Int): Flow<Habit>
+
     @Query("SELECT * FROM habit WHERE category =:category AND started = 0")
     fun getHabitByCategory(category: String): Flow<List<Habit>>
 

@@ -13,6 +13,7 @@ interface HabitRepository {
     suspend fun updateHabit(habit: Habit)
     fun getStartedHabits(): Flow<List<Habit>>
     fun getAllHabits(): Flow<List<Habit>>
+    fun getHabitById(id: Int): Flow<Habit>
     fun getHabitByCategory(category: String): Flow<List<Habit>>
     suspend fun insertCategory(category: Category)
     fun getAllCategory(): Flow<List<Category>>

@@ -20,4 +20,16 @@
     <string name="total">Total</string>
     <string name="category_name">Category name</string>
     <string name="done">Done</string>
+    <string name="please_write_habit_name">Please write habit name</string>
+    <string name="please_select_category">Please select category</string>
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
+    <string name="habit_saved_successfully">Habit saved successfully</string>
+    <string name="alertOn">Alert On</string>
+    <string name="delete">Delete</string>
+    <string name="restart">Restart</string>
+    <string name="alertOff">Alert Off</string>
+    <string name="delete_habit">Delete habit</string>
+    <string name="delete_habit_message">Are you sure to delete the habit?</string>
+    <string name="restart_habit_message">Are you sure to restart habit</string>
 </resources>

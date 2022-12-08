@@ -9,7 +9,11 @@
         android:id="@+id/dashboardFragment"
         android:name="com.woynapp.aliskanlik.presentation.dashboard.DashboardFragment"
         android:label="fragment_dashboard"
-        tools:layout="@layout/fragment_dashboard" />
+        tools:layout="@layout/fragment_dashboard" >
+        <action
+            android:id="@+id/action_dashboardFragment_to_habitDetailsFragment"
+            app:destination="@id/habitDetailsFragment" />
+    </fragment>
     <fragment
         android:id="@+id/categoryFragment"
         android:name="com.woynapp.aliskanlik.presentation.category.CategoryFragment"
@@ -30,4 +34,12 @@
         android:name="com.woynapp.aliskanlik.presentation.profile.ProfileFragment"
         android:label="fragment_profile"
         tools:layout="@layout/fragment_profile" />
+    <fragment
+        android:id="@+id/habitDetailsFragment"
+        android:name="com.woynapp.aliskanlik.presentation.habit_dateils.HabitDetailsFragment"
+        android:label="HabitDetailsFragment" >
+        <argument
+            android:name="habitId"
+            app:argType="integer" />
+    </fragment>
 </navigation>

@@ -18,13 +18,21 @@ class AddHabitViewModel @Inject constructor(
     private val _categories = MutableStateFlow<List<Category>>(emptyList())
     val categories = _categories.asStateFlow()
 
+    init {
+        getAllCategory()
+    }
+
     fun addHabit(habit: Habit) = viewModelScope.launch{
         repo.insertHabit(habit)
     }
 
-    fun getAllCategory() = viewModelScope.launch {
+    private fun getAllCategory() = viewModelScope.launch {
         repo.getAllCategory().onEach {
             _categories.value = it
         }.launchIn(viewModelScope)
+    }
+
+    fun addCategory(category: Category) = viewModelScope.launch {
+        repo.insertCategory(category)
     }
 }

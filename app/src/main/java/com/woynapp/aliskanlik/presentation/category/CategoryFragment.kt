@@ -1,5 +1,6 @@
 package com.woynapp.aliskanlik.presentation.category
 
+import android.app.AlertDialog
 import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.Fragment
@@ -80,7 +81,14 @@ class CategoryFragment : Fragment(R.layout.fragment_category), AdapterItemListen
     }
 
     override fun onClick(item: Habit) {
-
+        val alertDialog = AlertDialog.Builder(requireContext())
+        alertDialog.setTitle(item.name)
+        alertDialog.setMessage("Do you want to start this challenge?")
+        alertDialog.setPositiveButton(getString(R.string.yes)) { _, _ ->
+            viewModel.updateHabit(item.copy(started = true, started_date = System.currentTimeMillis()))
+        }
+        alertDialog.setNegativeButton(getString(R.string.no)) { _, _ -> }
+        alertDialog.show()
     }
 
     override fun addCategory() {
@@ -89,7 +97,15 @@ class CategoryFragment : Fragment(R.layout.fragment_category), AdapterItemListen
         }.show(childFragmentManager, "Add Habit bottom sheet")
     }
 
+    private var selectedCategory: String? = null
+
     override fun onClick(item: Category) {
-        viewModel.getHabitByCategory(item.name)
+        if (selectedCategory == item.name){
+            viewModel.getAllHabits()
+            selectedCategory = null
+        }else {
+            selectedCategory = item.name
+            viewModel.getHabitByCategory(item.name)
+        }
     }
 }

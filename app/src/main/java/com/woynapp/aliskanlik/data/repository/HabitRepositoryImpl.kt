@@ -31,6 +31,10 @@ class HabitRepositoryImpl @Inject constructor(
         return dao.getAllHabits()
     }
 
+    override fun getHabitById(id: Int): Flow<Habit> {
+        return dao.getHabitById(id)
+    }
+
     override fun getHabitByCategory(category: String): Flow<List<Habit>> {
         return dao.getHabitByCategory(category)
     }

@@ -7,6 +7,7 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.woynapp.aliskanlik.R
 import com.woynapp.aliskanlik.databinding.FragmentDashboardBinding
@@ -51,5 +52,7 @@ class DashboardFragment : Fragment(R.layout.fragment_dashboard), AdapterItemList
     }
 
     override fun onClick(item: Habit) {
+        val action = DashboardFragmentDirections.actionDashboardFragmentToHabitDetailsFragment(item.id!!)
+        findNavController().navigate(action)
     }
 }
