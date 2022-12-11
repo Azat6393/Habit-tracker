@@ -1,12 +1,21 @@
 package com.woynapp.aliskanlik.presentation.habit_dateils
 
+import android.Manifest
+import android.app.AlarmManager
+import android.app.NotificationChannel
+import android.app.NotificationManager
 import android.app.TimePickerDialog
+import android.content.Intent
 import android.graphics.Color
 import android.graphics.Typeface
+import android.os.Build
 import android.os.Bundle
+import android.provider.Settings
 import android.view.Gravity
 import android.view.View
 import android.widget.Toast
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.annotation.RequiresApi
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -17,13 +26,14 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.GridLayoutManager
 import com.google.android.material.bottomnavigation.BottomNavigationView
-import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.skydoves.powermenu.MenuAnimation
 import com.skydoves.powermenu.OnMenuItemClickListener
 import com.skydoves.powermenu.PowerMenu
 import com.skydoves.powermenu.PowerMenuItem
 import com.woynapp.aliskanlik.R
+import com.woynapp.aliskanlik.core.notification.RemindersManager
 import com.woynapp.aliskanlik.core.utils.getDaysDetail
+import com.woynapp.aliskanlik.core.utils.requestPermission
 import com.woynapp.aliskanlik.core.utils.showAlertDialog
 import com.woynapp.aliskanlik.core.utils.toDays
 import com.woynapp.aliskanlik.databinding.FragmentHabitDetailsBinding
@@ -32,6 +42,7 @@ import com.woynapp.aliskanlik.presentation.adapter.DaysAdapter
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import java.util.*
+
 
 @AndroidEntryPoint
 class HabitDetailsFragment : Fragment(R.layout.fragment_habit_details) {
@@ -97,7 +108,7 @@ class HabitDetailsFragment : Fragment(R.layout.fragment_habit_details) {
                 }
                 1 -> {
                     // alert off
-
+                    currentHabit?.id?.let { RemindersManager.stopReminder(requireContext(), it) }
                     powerMenu.dismiss()
                 }
                 2 -> {
@@ -119,7 +130,10 @@ class HabitDetailsFragment : Fragment(R.layout.fragment_habit_details) {
                         getString(R.string.delete_habit),
                         getString(R.string.delete_habit_message)
                     ) {
-                        currentHabit?.let { viewModel.deleteHabit(habit = it) }
+                        currentHabit?.let {
+                            RemindersManager.stopReminder(requireContext(), it.id!!)
+                            viewModel.deleteHabit(habit = it)
+                        }
                         findNavController().popBackStack()
                     }
                 }
@@ -128,13 +142,39 @@ class HabitDetailsFragment : Fragment(R.layout.fragment_habit_details) {
 
     private fun showTimePicker() {
         val c = Calendar.getInstance()
-
         val hour = c.get(Calendar.HOUR_OF_DAY)
         val minute = c.get(Calendar.MINUTE)
         val timePickerDialog = TimePickerDialog(
             requireContext(),
             { _, hourOfDay, minute ->
-                Toast.makeText(requireContext(), "$hourOfDay:$minute", Toast.LENGTH_SHORT).show()
+                currentHabit!!.id?.let {
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+                        val alarmManager = ContextCompat.getSystemService(
+                            requireContext(),
+                            AlarmManager::class.java
+                        )
+                        if (alarmManager?.canScheduleExactAlarms() == false) {
+                            Intent().also { intent ->
+                                intent.action = Settings.ACTION_REQUEST_SCHEDULE_EXACT_ALARM
+                                requireContext().startActivity(intent)
+                            }
+                        } else {
+                            createNotificationsChannels()
+                            RemindersManager.startReminder(
+                                requireContext(),
+                                reminderTime = "$hourOfDay:$minute",
+                                reminderId = currentHabit?.id!!
+                            )
+                        }
+                    } else {
+                        createNotificationsChannels()
+                        RemindersManager.startReminder(
+                            requireContext(),
+                            reminderTime = "$hourOfDay:$minute",
+                            reminderId = it
+                        )
+                    }
+                }
             },
             hour,
             minute,
@@ -143,6 +183,20 @@ class HabitDetailsFragment : Fragment(R.layout.fragment_habit_details) {
         timePickerDialog.show()
     }
 
+    private fun createNotificationsChannels() {
+
+        val channel = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            NotificationChannel(
+                getString(R.string.reminders_notification_channel_id),
+                getString(R.string.reminders_notification_channel_name),
+                NotificationManager.IMPORTANCE_HIGH
+            )
+        } else {
+            TODO("VERSION.SDK_INT < O")
+        }
+        ContextCompat.getSystemService(requireContext(), NotificationManager::class.java)
+            ?.createNotificationChannel(channel)
+    }
 
     private fun markDay() {
         currentHabit?.let { habit ->

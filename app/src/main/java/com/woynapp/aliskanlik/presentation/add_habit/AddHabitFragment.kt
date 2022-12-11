@@ -20,6 +20,7 @@ import com.woynapp.aliskanlik.domain.model.Habit
 import com.woynapp.aliskanlik.presentation.adapter.CategoryAdapter
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
+import java.util.UUID
 
 
 @AndroidEntryPoint
@@ -48,7 +49,7 @@ class AddHabitFragment : Fragment(R.layout.fragment_add_habit),
                     description = description,
                     started = false,
                     category = selectedCategory!!,
-                    days = BooleanArray(daySize).toList(),
+                    days = BooleanArray(daySize).toList()
                 )
                 viewModel.addHabit(habit)
                 clearViews()

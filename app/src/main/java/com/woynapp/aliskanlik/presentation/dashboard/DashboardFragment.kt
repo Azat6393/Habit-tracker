@@ -9,6 +9,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.woynapp.aliskanlik.R
 import com.woynapp.aliskanlik.databinding.FragmentDashboardBinding
 import com.woynapp.aliskanlik.domain.model.Habit
@@ -28,6 +29,12 @@ class DashboardFragment : Fragment(R.layout.fragment_dashboard), AdapterItemList
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         _binding = FragmentDashboardBinding.bind(view)
+
+        _binding.newHabit.setOnClickListener {
+            requireActivity()
+                .findViewById<BottomNavigationView>(R.id.bottom_navigation_view)
+                .selectedItemId = R.id.habitDetailsFragment
+        }
 
         initRecyclerView()
         observe()

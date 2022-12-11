@@ -129,8 +129,6 @@ dependencies {
     implementation "io.github.aghajari:AXEmojiView:$emojiViewVersion"
     implementation "io.github.aghajari:AXEmojiView-$emojiViewProvider:$emojiViewVersion"
 
-    implementation 'com.github.cooltechworks:ScratchView:v1.1'
-
     implementation 'de.hdodenhof:circleimageview:3.1.0'
 
     implementation "com.github.skydoves:powermenu:2.2.0"

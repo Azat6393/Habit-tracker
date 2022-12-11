@@ -32,4 +32,10 @@
     <string name="delete_habit">Delete habit</string>
     <string name="delete_habit_message">Are you sure to delete the habit?</string>
     <string name="restart_habit_message">Are you sure to restart habit</string>
+    <string name="title_notification_reminder">Time to get new habit</string>
+    <string name="description_notification_reminder">description notification reminder</string>
+    <string name="reminders_notification_channel_id">aliskanlik_notification_id</string>
+    <string name="reminders_notification_channel_name">aliskanlik_notification_channel</string>
+    <string name="ok">Ok</string>
+    <string name="permission_required_for_alarm">Without this permission app cannot show alarm</string>
 </resources>

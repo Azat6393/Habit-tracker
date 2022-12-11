@@ -3,21 +3,18 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/motivation_bkg"
     tools:context=".presentation.motivation.MotivationFragment">
 
-
-
-
-    <com.cooltechworks.views.ScratchTextView
-        android:id="@+id/idScratchCardIv"
+    <TextView
+        android:id="@+id/motivationText"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:fontFamily="@font/quicksand_bold"
         android:gravity="center"
-        android:textSize="20sp"
-        android:textStyle="bold"
-        android:textColor="@color/black"
+        android:layout_margin="20dp"
         android:text="Hayat her ne kadar zor gorunce de yapabileceginiz ve basarabileceginiz bir sey her zaman vardir"
-        android:background="@drawable/motivation_bkg"
-        />
-
+        android:textColor="@color/black"
+        android:textSize="20sp"
+        android:textStyle="bold" />
 </FrameLayout>
