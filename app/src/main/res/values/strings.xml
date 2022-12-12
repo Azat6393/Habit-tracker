@@ -38,4 +38,18 @@
     <string name="reminders_notification_channel_name">aliskanlik_notification_channel</string>
     <string name="ok">Ok</string>
     <string name="permission_required_for_alarm">Without this permission app cannot show alarm</string>
+    <string name="login_with_google">Log in with Google</string>
+    <string name="sign_in">Sing in</string>
+    <string name="sign_up">Sign up</string>
+    <string name="enter_your_email_address_and_password">Enter your email and password</string>
+    <string name="enter_your_email_address">Enter your email address</string>
+    <string name="password">Password</string>
+    <string name="log_in">Log in</string>
+    <string name="forgot_password">FORGOT PASSWORD</string>
+    <string name="name">Name</string>
+    <string name="last_name">Last name</string>
+    <string name="enter_your_name">Enter your full name and email address</string>
+    <string name="verify_your_phone_number">What is your phone number?</string>
+    <string name="phone_number">Phone number</string>
+    <string name="continue_text">Continue</string>
 </resources>
