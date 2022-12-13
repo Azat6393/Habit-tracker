@@ -33,7 +33,14 @@
         android:id="@+id/profileFragment"
         android:name="com.woynapp.aliskanlik.presentation.profile.ProfileFragment"
         android:label="fragment_profile"
-        tools:layout="@layout/fragment_profile" />
+        tools:layout="@layout/fragment_profile" >
+        <action
+            android:id="@+id/action_profileFragment_to_webViewFragment"
+            app:destination="@id/webViewFragment" />
+        <action
+            android:id="@+id/action_profileFragment_to_aboutUsFragment"
+            app:destination="@id/aboutUsFragment" />
+    </fragment>
     <fragment
         android:id="@+id/habitDetailsFragment"
         android:name="com.woynapp.aliskanlik.presentation.habit_dateils.HabitDetailsFragment"
@@ -42,4 +49,16 @@
             android:name="habitId"
             app:argType="integer" />
     </fragment>
+    <fragment
+        android:id="@+id/webViewFragment"
+        android:name="com.woynapp.aliskanlik.presentation.auth.WebViewFragment"
+        android:label="WebViewFragment" >
+        <argument
+            android:name="url"
+            app:argType="string" />
+    </fragment>
+    <fragment
+        android:id="@+id/aboutUsFragment"
+        android:name="com.woynapp.aliskanlik.presentation.profile.AboutUsFragment"
+        android:label="AboutUsFragment" />
 </navigation>

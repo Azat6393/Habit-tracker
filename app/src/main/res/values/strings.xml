@@ -60,4 +60,6 @@
     <string name="input_password">Please input password</string>
     <string name="input_first_name">Please input first name</string>
     <string name="input_last_name">Please input last name</string>
+    <string name="sign_out_message">Are you sure to sign out?</string>
+    <string name="about_us_text">By combining user-friendly designs with up-to-date and innovative technologies, we offer compatible and convenient applications free of charge.</string>
 </resources>

@@ -150,6 +150,7 @@
         android:max="120"
         android:min="21"
         android:progress="21"
+        android:thumbTint="?attr/primary_color"
         android:progressTint="?attr/primary_color"
         android:progressBackgroundTint="?attr/primary_color"
         app:layout_constraintEnd_toEndOf="parent"

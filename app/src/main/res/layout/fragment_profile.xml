@@ -25,23 +25,50 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
 
-                <de.hdodenhof.circleimageview.CircleImageView
+                <FrameLayout
                     android:id="@+id/profile_image"
-                    android:layout_width="70dp"
-                    android:layout_height="70dp"
+                    android:layout_width="80dp"
+                    android:layout_height="80dp"
                     android:layout_marginStart="60dp"
                     android:layout_marginTop="10dp"
                     android:layout_marginBottom="10dp"
-                    android:src="@drawable/avatar_icon"
+                    android:clickable="true"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    app:layout_constraintTop_toTopOf="parent"
+                    android:focusable="true">
 
-                <TextView
+                    <de.hdodenhof.circleimageview.CircleImageView
+                        android:id="@+id/profile_photo_iv"
+                        android:layout_width="70dp"
+                        android:layout_height="70dp"
+                        android:layout_gravity="center"
+                        android:src="@drawable/avatar_icon" />
+
+                    <ImageView
+                        android:id="@+id/add_btn"
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:layout_gravity="end"
+                        android:src="@drawable/ic_baseline_add_circle_24"
+                        android:visibility="gone" />
+
+                    <ProgressBar
+                        android:id="@+id/progress_bar"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:visibility="gone"
+                        android:indeterminateTint="?attr/primary_color"/>
+
+                </FrameLayout>
+
+
+                <EditText
                     android:id="@+id/user_name"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_margin="10dp"
+                    android:background="@color/light_surface"
                     android:maxLines="1"
                     android:singleLine="true"
                     android:textColor="?secondary_color"
@@ -75,12 +102,11 @@
                         android:layout_height="40dp"
                         android:layout_marginEnd="20dp"
                         android:padding="5dp"
-                        android:visibility="gone"
                         android:src="@drawable/ic_baseline_save_alt_24"
+                        android:visibility="gone"
                         app:tint="?attr/primary_color" />
 
                 </FrameLayout>
-
 
 
             </androidx.constraintlayout.widget.ConstraintLayout>
@@ -100,36 +126,36 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:weightSum="10"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                android:weightSum="10">
 
 
                 <ImageView
                     android:layout_width="23dp"
                     android:layout_height="23dp"
+                    android:layout_marginStart="60dp"
                     android:layout_marginTop="15dp"
                     android:layout_marginBottom="15dp"
-                    android:layout_marginStart="60dp"
-                    android:src="@drawable/dark_mode_icon"/>
+                    android:src="@drawable/dark_mode_icon" />
 
                 <TextView
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
-                    android:text="@string/dark_mode"
-                    android:layout_weight="7"
-                    android:textSize="18sp"
-                    android:gravity="center|start"
                     android:layout_marginStart="20dp"
-                    android:textColor="@color/light_secondary"/>
+                    android:layout_weight="7"
+                    android:gravity="center|start"
+                    android:text="@string/dark_mode"
+                    android:textColor="@color/light_secondary"
+                    android:textSize="18sp" />
 
                 <Switch
                     android:id="@+id/dark_mode_switch"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
-                    android:layout_weight="3"
                     android:layout_marginEnd="20dp"
-                    android:theme="@style/SCBSwitch"
+                    android:layout_weight="3"
                     android:gravity="end|center"
+                    android:theme="@style/SCBSwitch"
                     tools:ignore="UseSwitchCompatOrMaterialXml" />
 
             </LinearLayout>
@@ -137,7 +163,6 @@
         </androidx.cardview.widget.CardView>
 
         <androidx.cardview.widget.CardView
-            android:id="@+id/about_btn"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="-40dp"
@@ -147,10 +172,11 @@
             app:cardCornerRadius="60dp">
 
             <LinearLayout
+                android:id="@+id/about_btn"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:clickable="true"
                 android:background="?attr/selectableItemBackground"
+                android:clickable="true"
                 android:focusable="true"
                 android:orientation="horizontal">
 
@@ -158,27 +184,26 @@
                 <ImageView
                     android:layout_width="23dp"
                     android:layout_height="23dp"
+                    android:layout_marginStart="60dp"
                     android:layout_marginTop="15dp"
                     android:layout_marginBottom="15dp"
-                    android:layout_marginStart="60dp"
-                    android:src="@drawable/about_us_icon"/>
+                    android:src="@drawable/about_us_icon" />
 
                 <TextView
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
+                    android:layout_marginStart="20dp"
+                    android:layout_weight="7"
+                    android:gravity="center|start"
                     android:text="@string/about_us"
-                    android:layout_weight="7"
-                    android:textSize="18sp"
-                    android:gravity="center|start"
-                    android:layout_marginStart="20dp"
-                    android:textColor="@color/light_secondary"/>
+                    android:textColor="@color/light_secondary"
+                    android:textSize="18sp" />
 
             </LinearLayout>
 
         </androidx.cardview.widget.CardView>
 
         <androidx.cardview.widget.CardView
-            android:id="@+id/websiteBtn"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="-40dp"
@@ -188,38 +213,38 @@
             app:cardCornerRadius="60dp">
 
             <LinearLayout
+                android:id="@+id/websiteBtn"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="?attr/selectableItemBackground"
-                android:focusable="true"
                 android:clickable="true"
+                android:focusable="true"
                 android:orientation="horizontal">
 
 
                 <ImageView
                     android:layout_width="23dp"
                     android:layout_height="23dp"
+                    android:layout_marginStart="60dp"
                     android:layout_marginTop="15dp"
                     android:layout_marginBottom="15dp"
-                    android:layout_marginStart="60dp"
-                    android:src="@drawable/website_icon"/>
+                    android:src="@drawable/website_icon" />
 
                 <TextView
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
+                    android:layout_marginStart="20dp"
+                    android:layout_weight="7"
+                    android:gravity="center|start"
                     android:text="@string/website"
-                    android:layout_weight="7"
-                    android:textSize="18sp"
-                    android:gravity="center|start"
-                    android:layout_marginStart="20dp"
-                    android:textColor="@color/light_secondary"/>
+                    android:textColor="@color/light_secondary"
+                    android:textSize="18sp" />
 
             </LinearLayout>
 
         </androidx.cardview.widget.CardView>
 
         <androidx.cardview.widget.CardView
-            android:id="@+id/privacyPolictBtn"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="-40dp"
@@ -229,38 +254,38 @@
             app:cardCornerRadius="60dp">
 
             <LinearLayout
+                android:id="@+id/privacyPolictBtn"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="?attr/selectableItemBackground"
-                android:focusable="true"
                 android:clickable="true"
+                android:focusable="true"
                 android:orientation="horizontal">
 
 
                 <ImageView
                     android:layout_width="23dp"
                     android:layout_height="23dp"
+                    android:layout_marginStart="60dp"
                     android:layout_marginTop="15dp"
                     android:layout_marginBottom="15dp"
-                    android:layout_marginStart="60dp"
-                    android:src="@drawable/privacy_policy_icon"/>
+                    android:src="@drawable/privacy_policy_icon" />
 
                 <TextView
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
+                    android:layout_marginStart="20dp"
+                    android:layout_weight="7"
+                    android:gravity="center|start"
                     android:text="@string/privacy_policy"
-                    android:layout_weight="7"
-                    android:textSize="18sp"
-                    android:gravity="center|start"
-                    android:layout_marginStart="20dp"
-                    android:textColor="@color/light_secondary"/>
+                    android:textColor="@color/light_secondary"
+                    android:textSize="18sp" />
 
             </LinearLayout>
 
         </androidx.cardview.widget.CardView>
 
         <androidx.cardview.widget.CardView
-            android:id="@+id/termOfService"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="-40dp"
@@ -270,38 +295,38 @@
             app:cardCornerRadius="60dp">
 
             <LinearLayout
+                android:id="@+id/termOfService"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="?attr/selectableItemBackground"
-                android:focusable="true"
                 android:clickable="true"
+                android:focusable="true"
                 android:orientation="horizontal">
 
 
                 <ImageView
                     android:layout_width="23dp"
                     android:layout_height="23dp"
+                    android:layout_marginStart="60dp"
                     android:layout_marginTop="15dp"
                     android:layout_marginBottom="15dp"
-                    android:layout_marginStart="60dp"
-                    android:src="@drawable/term_of_service_icon"/>
+                    android:src="@drawable/term_of_service_icon" />
 
                 <TextView
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
-                    android:text="@string/term_of_service"
-                    android:layout_weight="7"
-                    android:textSize="18sp"
-                    android:gravity="center|start"
                     android:layout_marginStart="20dp"
-                    android:textColor="@color/light_secondary"/>
+                    android:layout_weight="7"
+                    android:gravity="center|start"
+                    android:text="@string/term_of_service"
+                    android:textColor="@color/light_secondary"
+                    android:textSize="18sp" />
 
             </LinearLayout>
 
         </androidx.cardview.widget.CardView>
 
         <androidx.cardview.widget.CardView
-            android:id="@+id/signOutBtn"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="-40dp"
@@ -312,31 +337,32 @@
             app:cardCornerRadius="60dp">
 
             <LinearLayout
+                android:id="@+id/signOutBtn"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="?attr/selectableItemBackground"
-                android:focusable="true"
                 android:clickable="true"
+                android:focusable="true"
                 android:orientation="horizontal">
 
 
                 <ImageView
                     android:layout_width="23dp"
                     android:layout_height="23dp"
+                    android:layout_marginStart="60dp"
                     android:layout_marginTop="15dp"
                     android:layout_marginBottom="15dp"
-                    android:layout_marginStart="60dp"
-                    android:src="@drawable/sign_out_icon"/>
+                    android:src="@drawable/sign_out_icon" />
 
                 <TextView
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
-                    android:text="@string/sign_out"
-                    android:layout_weight="7"
-                    android:textSize="18sp"
-                    android:gravity="center|start"
                     android:layout_marginStart="20dp"
-                    android:textColor="@color/light_secondary"/>
+                    android:layout_weight="7"
+                    android:gravity="center|start"
+                    android:text="@string/sign_out"
+                    android:textColor="@color/light_secondary"
+                    android:textSize="18sp" />
 
             </LinearLayout>
 
