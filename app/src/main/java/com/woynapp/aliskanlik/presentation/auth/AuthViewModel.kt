@@ -230,7 +230,26 @@ class AuthViewModel @Inject constructor(
             }
     }
 
+
+    fun signOut() = viewModelScope.launch {
+        _isAuth.value = false
+        Firebase.auth.signOut()
+        dataStore.edit { preferences ->
+            preferences[DatastorePreferencesKey.USER_ID_KEY] = ""
+            preferences[DatastorePreferencesKey.USER_FIRST_NAME_KEY] = ""
+            preferences[DatastorePreferencesKey.USER_LAST_NAME_KEY] = ""
+            preferences[DatastorePreferencesKey.USER_PHONE_NUMBER_KEY] = ""
+            preferences[DatastorePreferencesKey.USER_PROFILE_PHOTO_KEY] = ""
+            preferences[DatastorePreferencesKey.USER_EMAIL_KEY] = ""
+            preferences[DatastorePreferencesKey.USER_CREATED_DATE_KEY] = 0
+        }
+    }
+
     fun clearSignUpResponse() {
         _signUpResponse.value = Resource.Empty<User>()
+    }
+
+    fun clearSignInResponse(){
+        _signInResponse.value = Resource.Empty<User>()
     }
 }

@@ -226,7 +226,7 @@
         android:id="@+id/progress_bar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:indeterminateTint="?attr/primary_color"
+        android:indeterminateTint="?attr/background_color"
         android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="@+id/sign_up"
         app:layout_constraintEnd_toEndOf="@+id/sign_up"

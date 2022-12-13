@@ -94,3 +94,20 @@ fun requestPermission(
         }
     }
 }
+
+
+fun getJsonFromAssets(context: Context, fileName: String): String? {
+    var jsonString = ""
+    try {
+        val inputStream = context.assets.open(fileName)
+        val size = inputStream.available()
+        val buffer = ByteArray(size)
+        inputStream.read(buffer)
+        inputStream.close()
+        jsonString = String(buffer)
+    } catch (e: Exception) {
+        e.printStackTrace()
+        return null
+    }
+    return jsonString
+}

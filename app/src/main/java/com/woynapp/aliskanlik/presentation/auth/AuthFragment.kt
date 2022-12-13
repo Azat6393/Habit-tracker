@@ -1,20 +1,20 @@
 package com.woynapp.aliskanlik.presentation.auth
 
-import android.app.Activity
 import android.content.Intent
 import android.content.IntentSender
 import android.os.Bundle
 import android.util.Log
 import android.view.View
 import androidx.activity.OnBackPressedCallback
-import androidx.activity.result.ActivityResult
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import androidx.navigation.fragment.findNavController
+import com.google.android.gms.auth.api.Auth
 import com.google.android.gms.auth.api.identity.BeginSignInRequest
 import com.google.android.gms.auth.api.identity.Identity
 import com.google.android.gms.auth.api.identity.SignInClient
@@ -36,7 +36,7 @@ class AuthFragment : Fragment(R.layout.fragment_auth) {
     private val TAG: String = "Google Sign in"
     private lateinit var oneTapClient: SignInClient
     private lateinit var singInRequest: BeginSignInRequest
-    private val viewModel: AuthViewModel by viewModels()
+    private val viewModel: AuthViewModel by activityViewModels()
     private val REQ_ONE_TAP = 2
     private var showOneTapUI = true
 
@@ -53,10 +53,12 @@ class AuthFragment : Fragment(R.layout.fragment_auth) {
     private fun initView() {
         _binding.apply {
             signUpBtn.setOnClickListener {
-                // TODO navigate to SingUpFragment
+                val action = AuthFragmentDirections.actionAuthFragmentToSignUpFragment()
+                findNavController().navigate(action)
             }
             signInBtn.setOnClickListener {
-                // TODO navigate to SignInFragment
+                val action = AuthFragmentDirections.actionAuthFragmentToSignInFragment()
+                findNavController().navigate(action)
             }
             loginWithGoogleBtn.setOnClickListener {
                 initGoogleSignInRequest()
@@ -78,7 +80,13 @@ class AuthFragment : Fragment(R.layout.fragment_auth) {
                 viewModel.currentUser.collect { user ->
                     val isAuth = viewModel.isAuth.value
                     if (isAuth && user.phone_number.toString().isBlank()) {
-                        //TODO navigate to VerifyNumberFragment
+                        user.id?.let { id ->
+                            val action =
+                                AuthFragmentDirections.actionAuthFragmentToVerifyNumberFragment(
+                                    id
+                                )
+                            findNavController().navigate(action)
+                        }
                     }
                 }
             }
@@ -106,8 +114,13 @@ class AuthFragment : Fragment(R.layout.fragment_auth) {
                                 requireActivity().finish()
 
                             } else {
+                                viewModel.clearSignUpResponse()
                                 it.data?.id?.let { id ->
-                                    // TODO navigate to VerifyNumberFragment
+                                    val action =
+                                        AuthFragmentDirections.actionAuthFragmentToVerifyNumberFragment(
+                                            id
+                                        )
+                                    findNavController().navigate(action)
                                 }
                             }
                         }
@@ -120,7 +133,7 @@ class AuthFragment : Fragment(R.layout.fragment_auth) {
     private fun isLoading(state: Boolean) {
         _binding.apply {
             progressBar.isVisible = state
-            loginWithGoogleBtn.isVisible = !state
+            loginWithGoogleBtn.visibility = if (state) View.INVISIBLE else View.VISIBLE
         }
     }
 
@@ -163,6 +176,7 @@ class AuthFragment : Fragment(R.layout.fragment_auth) {
             .setAutoSelectEnabled(true)
             .build()
     }
+
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
 
