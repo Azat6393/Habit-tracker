@@ -15,15 +15,17 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-        <ImageView
+        <TextView
             android:id="@+id/icon"
             android:layout_width="60dp"
             android:layout_height="60dp"
             android:layout_margin="20dp"
+            android:autoSizeTextType="uniform"
+            tools:text="\ud83d\ude03"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            android:src="@drawable/wine" />
+            tools:targetApi="o" />
 
         <LinearLayout
             android:id="@+id/linearLayout"

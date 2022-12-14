@@ -15,12 +15,15 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-        <ImageView
+        <TextView
             android:id="@+id/icon"
             android:layout_width="50dp"
             android:layout_height="50dp"
+            android:autoSizeTextType="uniform"
+            tools:text="\ud83d\ude03"
             android:layout_margin="15dp"
-            tools:src="@drawable/wine"/>
+            tools:src="@drawable/wine"
+            tools:targetApi="o" />
 
         <TextView
             android:id="@+id/title"

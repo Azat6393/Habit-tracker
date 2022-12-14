@@ -1,5 +1,6 @@
 package com.woynapp.aliskanlik.presentation.dashboard
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.Fragment
@@ -33,15 +34,27 @@ class DashboardFragment : Fragment(R.layout.fragment_dashboard),
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         _binding = FragmentDashboardBinding.bind(view)
-
+        observeUser()
         _binding.newHabit.setOnClickListener {
             requireActivity()
                 .findViewById<BottomNavigationView>(R.id.bottom_navigation_view)
-                .selectedItemId = R.id.habitDetailsFragment
+                .selectedItemId = R.id.habitFragment
         }
 
         initRecyclerView()
         observe()
+    }
+
+
+    @SuppressLint("SetTextI18n")
+    private fun observeUser() {
+        lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.CREATED) {
+                viewModel.currentUser.collect {
+                    _binding.title.text = "${getString(R.string.hello)} ${it.first_name}"
+                }
+            }
+        }
     }
 
     private fun observe() {

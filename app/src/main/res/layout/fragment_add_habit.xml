@@ -32,15 +32,33 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <ImageView
-        android:id="@+id/imageView"
+    <FrameLayout
+        android:id="@+id/emoji_container"
         android:layout_width="50dp"
         android:layout_height="50dp"
         android:layout_margin="20dp"
-        android:src="@drawable/add_image_icon"
+        android:clickable="true"
         app:layout_constraintBottom_toBottomOf="@+id/habitNameInputLayout"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/habitNameInputLayout" />
+        app:layout_constraintTop_toTopOf="@+id/habitNameInputLayout"
+        android:focusable="true" >
+
+        <TextView
+            android:id="@+id/emoji_tv"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:autoSizeTextType="uniform"
+            tools:text="\ud83d\ude03"
+            android:visibility="invisible"
+            tools:targetApi="o" />
+
+        <ImageView
+            android:id="@+id/emoji_ig"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:src="@drawable/add_image_icon"
+            tools:targetApi="o" />
+    </FrameLayout>
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/habitNameInputLayout"
@@ -50,7 +68,7 @@
         android:layout_margin="20dp"
         android:hint="@string/habit_name"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/imageView"
+        app:layout_constraintStart_toEndOf="@+id/emoji_container"
         app:layout_constraintTop_toBottomOf="@+id/textView2">
 
         <com.google.android.material.textfield.TextInputEditText

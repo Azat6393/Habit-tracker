@@ -260,6 +260,7 @@ class HabitDetailsFragment : Fragment(R.layout.fragment_habit_details) {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.habit.collect { result ->
                     result?.let {
+                        _binding.icon.text = result.habit.emoji
                         _binding.title.text = it.habit.name
                         _binding.descriptionTv.text = it.habit.description
                         mAdapter.submitList(result.days)

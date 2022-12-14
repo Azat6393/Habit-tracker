@@ -4,16 +4,18 @@ import android.os.Bundle
 import android.view.View
 import android.widget.SeekBar
 import android.widget.Toast
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
-import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.aghajari.emojiview.view.AXSingleEmojiView
 import com.google.android.material.snackbar.Snackbar
 import com.woynapp.aliskanlik.R
+import com.woynapp.aliskanlik.core.utils.Constants
+import com.woynapp.aliskanlik.core.utils.fromJsonToEmoji
+import com.woynapp.aliskanlik.core.utils.getJsonFromAssets
 import com.woynapp.aliskanlik.databinding.FragmentAddHabitBinding
 import com.woynapp.aliskanlik.domain.model.Category
 import com.woynapp.aliskanlik.domain.model.Habit
@@ -32,6 +34,7 @@ class AddHabitFragment : Fragment(R.layout.fragment_add_habit),
     private val viewModel: AddHabitViewModel by viewModels()
 
     private var selectedCategory: String? = null
+    private var selectedEmoji: String? = null
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -51,14 +54,35 @@ class AddHabitFragment : Fragment(R.layout.fragment_add_habit),
                     category = selectedCategory!!,
                     day_size = daySize,
                     uuid = UUID.randomUUID().toString(),
-                    emoji = ""
+                    emoji = selectedEmoji!!
                 )
                 viewModel.addHabit(habit)
                 clearViews()
-                Snackbar.make(_binding.root, getString(R.string.habit_saved_successfully), Snackbar.LENGTH_SHORT)
+                Snackbar.make(
+                    _binding.root,
+                    getString(R.string.habit_saved_successfully),
+                    Snackbar.LENGTH_SHORT
+                )
                     .show()
             }
         }
+        _binding.emojiContainer.setOnClickListener {
+            val emojiList =  getJsonFromAssets(
+                requireContext(),
+                Constants.emojiListJsonName
+            )?.fromJsonToEmoji()
+            emojiList?.let { list ->
+                EmojiBottomSheet(
+                    list
+                ){
+                    selectedEmoji = it
+                    _binding.emojiTv.text = selectedEmoji
+                    _binding.emojiIg.isVisible = false
+                    _binding.emojiTv.isVisible = true
+                }.show(childFragmentManager, "Emoji bottom sheet")
+            }
+        }
+
 
         initRecyclerViews()
         observe()
@@ -133,6 +157,14 @@ class AddHabitFragment : Fragment(R.layout.fragment_add_habit),
                 Toast.makeText(
                     requireContext(),
                     getString(R.string.please_select_category),
+                    Toast.LENGTH_SHORT
+                ).show()
+                return false
+            }
+            selectedEmoji.isNullOrBlank() -> {
+                Toast.makeText(
+                    requireContext(),
+                    getString(R.string.select_emoji_message),
                     Toast.LENGTH_SHORT
                 ).show()
                 return false

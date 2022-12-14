@@ -42,6 +42,7 @@ class StartedHabitsAdapter(private val listener: AdapterItemListener<HabitWithDa
 
         fun bind(item: HabitWithDays) {
             _binding.apply {
+                icon.text = item.habit.emoji
                 nameTv.text = item.habit.name
                 totalTv.text = item.days.size.toString()
                 val doneList = item.days.filter { it.type == 1 }

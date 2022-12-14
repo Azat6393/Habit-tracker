@@ -5,6 +5,7 @@ import android.content.pm.PackageManager
 import android.widget.Toast
 import androidx.core.content.ContextCompat
 import com.google.gson.Gson
+import com.woynapp.aliskanlik.domain.model.Emoji
 import java.util.concurrent.TimeUnit
 
 
@@ -21,6 +22,12 @@ fun String.fromJsonToCountyList(): List<CountryInfo> {
     val gson = Gson()
     return gson.fromJson(this, Array<CountryInfo>::class.java).asList()
 }
+
+fun String.fromJsonToEmoji(): List<Emoji> {
+    val gson = Gson()
+    return gson.fromJson(this, Array<Emoji>::class.java).asList()
+}
+
 
 fun Context.checkPermission(permission: String): Int {
     if (ContextCompat.checkSelfPermission(

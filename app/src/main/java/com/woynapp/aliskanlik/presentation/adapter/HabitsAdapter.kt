@@ -32,9 +32,9 @@ class HabitsAdapter(private val listener: AdapterItemListener<Habit>) :
         init {
             _binding.root.setOnClickListener {
                 val position = absoluteAdapterPosition
-                if (position != RecyclerView.NO_POSITION){
+                if (position != RecyclerView.NO_POSITION) {
                     val item = getItem(position)
-                    if (item != null){
+                    if (item != null) {
                         listener.onClick(item)
                     }
                 }
@@ -43,6 +43,7 @@ class HabitsAdapter(private val listener: AdapterItemListener<Habit>) :
 
         fun bind(item: Habit) {
             _binding.nameTv.text = item.name
+            _binding.icon.text = item.emoji
         }
     }
 

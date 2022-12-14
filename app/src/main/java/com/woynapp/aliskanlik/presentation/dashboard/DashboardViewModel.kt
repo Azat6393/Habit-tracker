@@ -1,26 +1,40 @@
 package com.woynapp.aliskanlik.presentation.dashboard
 
+import androidx.datastore.core.DataStore
+import androidx.datastore.preferences.core.Preferences
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.woynapp.aliskanlik.data.local.datastore.DatastorePreferencesKey
 import com.woynapp.aliskanlik.domain.model.DayInfo
 import com.woynapp.aliskanlik.domain.model.Habit
 import com.woynapp.aliskanlik.domain.model.HabitWithDays
+import com.woynapp.aliskanlik.domain.model.User
 import com.woynapp.aliskanlik.domain.repository.HabitRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class DashboardViewModel @Inject constructor(
-    private val repo: HabitRepository
+    private val repo: HabitRepository,
+    private val dataStore: DataStore<Preferences>
 ) : ViewModel() {
 
     private val _habits = MutableStateFlow<List<HabitWithDays>>(emptyList())
     val habits = _habits.asStateFlow()
+
+    val currentUser = dataStore.data.map { preferences ->
+        User(
+            id = preferences[DatastorePreferencesKey.USER_ID_KEY],
+            first_name = preferences[DatastorePreferencesKey.USER_FIRST_NAME_KEY],
+            last_name = preferences[DatastorePreferencesKey.USER_LAST_NAME_KEY],
+            phone_number = preferences[DatastorePreferencesKey.USER_PHONE_NUMBER_KEY],
+            profile_photo = preferences[DatastorePreferencesKey.USER_PROFILE_PHOTO_KEY],
+            email = preferences[DatastorePreferencesKey.USER_EMAIL_KEY],
+            created_date = preferences[DatastorePreferencesKey.USER_CREATED_DATE_KEY]
+        )
+    }
 
     init {
         getStartedHabits()

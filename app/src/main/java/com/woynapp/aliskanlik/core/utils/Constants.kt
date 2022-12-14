@@ -8,6 +8,7 @@ object Constants {
     const val statisticsDateFormat = "dd/MM/yyyy"
 
     const val countryListJsonName = "country_list.json"
+    const val emojiListJsonName = "emoji_list.json"
 
     const val FIREBASE_FIRESTORE_USERS_COLLECTION = "users"
     const val FIREBASE_FIRESTORE_STATISTICS_COLLECTION = "statistics"
