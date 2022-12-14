@@ -11,8 +11,10 @@ data class Habit(
     val description: String,
     val started: Boolean,
     val started_date: Long? = null,
-    val days: List<Boolean>,
-    val category: String
+    val category: String,
+    val day_size: Int,
+    val uuid: String,
+    val emoji: String
 )
 
 

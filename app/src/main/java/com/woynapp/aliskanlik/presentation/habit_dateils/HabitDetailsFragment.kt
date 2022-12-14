@@ -1,6 +1,5 @@
 package com.woynapp.aliskanlik.presentation.habit_dateils
 
-import android.Manifest
 import android.app.AlarmManager
 import android.app.NotificationChannel
 import android.app.NotificationManager
@@ -13,9 +12,6 @@ import android.os.Bundle
 import android.provider.Settings
 import android.view.Gravity
 import android.view.View
-import android.widget.Toast
-import androidx.activity.result.contract.ActivityResultContracts
-import androidx.annotation.RequiresApi
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -32,12 +28,12 @@ import com.skydoves.powermenu.PowerMenu
 import com.skydoves.powermenu.PowerMenuItem
 import com.woynapp.aliskanlik.R
 import com.woynapp.aliskanlik.core.notification.RemindersManager
-import com.woynapp.aliskanlik.core.utils.getDaysDetail
-import com.woynapp.aliskanlik.core.utils.requestPermission
 import com.woynapp.aliskanlik.core.utils.showAlertDialog
+import com.woynapp.aliskanlik.core.utils.showToastMessage
 import com.woynapp.aliskanlik.core.utils.toDays
 import com.woynapp.aliskanlik.databinding.FragmentHabitDetailsBinding
-import com.woynapp.aliskanlik.domain.model.Habit
+import com.woynapp.aliskanlik.domain.model.DayInfo
+import com.woynapp.aliskanlik.domain.model.HabitWithDays
 import com.woynapp.aliskanlik.presentation.adapter.DaysAdapter
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
@@ -55,7 +51,7 @@ class HabitDetailsFragment : Fragment(R.layout.fragment_habit_details) {
     private lateinit var powerMenu: PowerMenu
 
 
-    private var currentHabit: Habit? = null
+    private var currentHabit: HabitWithDays? = null
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -108,7 +104,12 @@ class HabitDetailsFragment : Fragment(R.layout.fragment_habit_details) {
                 }
                 1 -> {
                     // alert off
-                    currentHabit?.id?.let { RemindersManager.stopReminder(requireContext(), it) }
+                    currentHabit?.habit?.id?.let {
+                        RemindersManager.stopReminder(
+                            requireContext(),
+                            it
+                        )
+                    }
                     powerMenu.dismiss()
                 }
                 2 -> {
@@ -131,8 +132,8 @@ class HabitDetailsFragment : Fragment(R.layout.fragment_habit_details) {
                         getString(R.string.delete_habit_message)
                     ) {
                         currentHabit?.let {
-                            RemindersManager.stopReminder(requireContext(), it.id!!)
-                            viewModel.deleteHabit(habit = it)
+                            RemindersManager.stopReminder(requireContext(), it.habit.id!!)
+                            viewModel.deleteHabit(habit = it.habit)
                         }
                         findNavController().popBackStack()
                     }
@@ -147,7 +148,7 @@ class HabitDetailsFragment : Fragment(R.layout.fragment_habit_details) {
         val timePickerDialog = TimePickerDialog(
             requireContext(),
             { _, hourOfDay, minute ->
-                currentHabit!!.id?.let {
+                currentHabit!!.habit.id?.let {
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
                         val alarmManager = ContextCompat.getSystemService(
                             requireContext(),
@@ -163,7 +164,7 @@ class HabitDetailsFragment : Fragment(R.layout.fragment_habit_details) {
                             RemindersManager.startReminder(
                                 requireContext(),
                                 reminderTime = "$hourOfDay:$minute",
-                                reminderId = currentHabit?.id!!
+                                reminderId = currentHabit?.habit?.id!!
                             )
                         }
                     } else {
@@ -200,22 +201,50 @@ class HabitDetailsFragment : Fragment(R.layout.fragment_habit_details) {
 
     private fun markDay() {
         currentHabit?.let { habit ->
-            val intList = arrayListOf<Boolean>()
-            intList.addAll(habit.days)
             val currentMl = System.currentTimeMillis()
             val currentDayFromMl = currentMl.toDays()
-            val startedDayFromMl = habit.started_date!!.toDays()
+            val startedDayFromMl = habit.habit.started_date!!.toDays()
             val currentDay = currentDayFromMl - startedDayFromMl
-            val isAlreadyDone = habit.days[currentDay]
-            if (isAlreadyDone) {
-                Toast.makeText(requireContext(), "You already done for today", Toast.LENGTH_LONG)
-                    .show()
-            } else {
-                intList[currentDay] = true
-                println(intList)
-                viewModel.updateHabit(habit.copy(days = intList))
+            println(currentDay + 1)
+            val updateDay = habit.days.find { it.day.toLong() == currentDay + 1 }
+            updateDay?.let {
+                if (it.type == 1) {
+                    requireContext().showToastMessage(getString(R.string.already_done_text))
+                } else {
+                    viewModel.updateDay(it.copy(type = 1))
+                    updateDays(habit)
+                }
             }
         }
+    }
+
+    private fun updateDays(habit: HabitWithDays): HabitWithDays {
+        val newDays = arrayListOf<DayInfo>()
+        val currentMl = System.currentTimeMillis()
+        val currentDayFromMl = currentMl.toDays()
+        val startedDayFromMl = habit.habit.started_date!!.toDays()
+        habit.days.forEach {
+            when (it.type) {
+                1 -> {
+                    newDays.add(it)
+                }
+                2 -> {
+                    newDays.add(it)
+                }
+                0 -> {
+                    val currentDay = currentDayFromMl - startedDayFromMl
+                    if (it.day < currentDay + 1) {
+                        val newDay = it.copy(type = 2)
+                        newDays.add(newDay).also {
+                            viewModel.updateDay(newDay)
+                        }
+                    } else {
+                        newDays.add(it)
+                    }
+                }
+            }
+        }
+        return habit.copy(days = newDays)
     }
 
     private fun initRecyclerView() {
@@ -231,9 +260,9 @@ class HabitDetailsFragment : Fragment(R.layout.fragment_habit_details) {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.habit.collect { result ->
                     result?.let {
-                        _binding.title.text = it.name
-                        _binding.descriptionTv.text = it.description
-                        mAdapter.submitList(getDaysDetail(it.days, it.started_date!!))
+                        _binding.title.text = it.habit.name
+                        _binding.descriptionTv.text = it.habit.description
+                        mAdapter.submitList(result.days)
                         currentHabit = it
                     }
                 }

@@ -49,7 +49,9 @@ class AddHabitFragment : Fragment(R.layout.fragment_add_habit),
                     description = description,
                     started = false,
                     category = selectedCategory!!,
-                    days = BooleanArray(daySize).toList()
+                    day_size = daySize,
+                    uuid = UUID.randomUUID().toString(),
+                    emoji = ""
                 )
                 viewModel.addHabit(habit)
                 clearViews()

@@ -17,10 +17,11 @@ import com.woynapp.aliskanlik.databinding.ItemDayBinding
 import com.woynapp.aliskanlik.databinding.ItemHabitBinding
 import com.woynapp.aliskanlik.databinding.ItemStartedHabitBinding
 import com.woynapp.aliskanlik.domain.model.Category
+import com.woynapp.aliskanlik.domain.model.DayInfo
 import com.woynapp.aliskanlik.domain.model.Habit
 
 class DaysAdapter :
-    ListAdapter<Int, DaysAdapter.DaysViewHolder>(DiffCallBack) {
+    ListAdapter<DayInfo, DaysAdapter.DaysViewHolder>(DiffCallBack) {
 
     private lateinit var mContext: Context
 
@@ -36,7 +37,7 @@ class DaysAdapter :
     override fun onBindViewHolder(holder: DaysViewHolder, position: Int) {
         val item = getItem(position)
         if (item != null) {
-            holder.bind(position + 1, item)
+            holder.bind(item)
         }
     }
 
@@ -44,9 +45,9 @@ class DaysAdapter :
     inner class DaysViewHolder(private val _binding: ItemDayBinding) :
         RecyclerView.ViewHolder(_binding.root) {
 
-        fun bind(day: Int, type: Int) {
-            _binding.day.text = day.toString()
-            when (type) {
+        fun bind(dayInfo: DayInfo) {
+            _binding.day.text = dayInfo.day.toString()
+            when (dayInfo.type) {
                 1 -> {
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                         _binding.cardview.setCardBackgroundColor(mContext.getColor(R.color.green))
@@ -94,12 +95,12 @@ class DaysAdapter :
     }
 
     companion object {
-        private val DiffCallBack = object : DiffUtil.ItemCallback<Int>() {
-            override fun areItemsTheSame(oldItem: Int, newItem: Int): Boolean {
-                return oldItem == newItem
+        private val DiffCallBack = object : DiffUtil.ItemCallback<DayInfo>() {
+            override fun areItemsTheSame(oldItem: DayInfo, newItem: DayInfo): Boolean {
+                return oldItem.id == newItem.id
             }
 
-            override fun areContentsTheSame(oldItem: Int, newItem: Int): Boolean {
+            override fun areContentsTheSame(oldItem: DayInfo, newItem: DayInfo): Boolean {
                 return oldItem == newItem
             }
         }

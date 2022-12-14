@@ -5,10 +5,11 @@ import android.content.pm.PackageManager
 import android.widget.Toast
 import androidx.core.content.ContextCompat
 import com.google.gson.Gson
+import java.util.concurrent.TimeUnit
 
 
-fun Long.toDays(): Int{
-    return ((this / (1000*60*60*24)) % 7).toInt()
+fun Long.toDays(): Long {
+    return ((this / (1000 * 60 * 60 * 24)))
 }
 
 fun Context.showToastMessage(message: String) {

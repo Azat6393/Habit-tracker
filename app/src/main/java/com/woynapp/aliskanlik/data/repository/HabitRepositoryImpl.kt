@@ -2,7 +2,9 @@ package com.woynapp.aliskanlik.data.repository
 
 import com.woynapp.aliskanlik.data.local.HabitDao
 import com.woynapp.aliskanlik.domain.model.Category
+import com.woynapp.aliskanlik.domain.model.DayInfo
 import com.woynapp.aliskanlik.domain.model.Habit
+import com.woynapp.aliskanlik.domain.model.HabitWithDays
 import com.woynapp.aliskanlik.domain.repository.HabitRepository
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
@@ -45,5 +47,25 @@ class HabitRepositoryImpl @Inject constructor(
 
     override fun getAllCategory(): Flow<List<Category>> {
         return dao.getAllCategory()
+    }
+
+    override suspend fun insertDayInfo(dayInfo: DayInfo) {
+        dao.insertDayInfo(dayInfo)
+    }
+
+    override suspend fun updateDayInfo(dayInfo: DayInfo) {
+        dao.updateDayInfo(dayInfo)
+    }
+
+    override suspend fun deleteAllDaysInfo(uuid: String) {
+        dao.deleteAllDaysInfo(uuid)
+    }
+
+    override fun getHabitWithDays(id: Int): Flow<HabitWithDays> {
+        return dao.getHabitWithDays(id)
+    }
+
+    override fun getAllHabitWithDays(): Flow<List<HabitWithDays>>{
+        return dao.getAllHabitWithDays()
     }
 }

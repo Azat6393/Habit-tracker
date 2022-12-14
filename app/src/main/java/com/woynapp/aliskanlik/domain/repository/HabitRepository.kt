@@ -1,10 +1,9 @@
 package com.woynapp.aliskanlik.domain.repository
 
-import androidx.room.Insert
-import androidx.room.OnConflictStrategy
-import androidx.room.Query
 import com.woynapp.aliskanlik.domain.model.Category
+import com.woynapp.aliskanlik.domain.model.DayInfo
 import com.woynapp.aliskanlik.domain.model.Habit
+import com.woynapp.aliskanlik.domain.model.HabitWithDays
 import kotlinx.coroutines.flow.Flow
 
 interface HabitRepository {
@@ -17,4 +16,9 @@ interface HabitRepository {
     fun getHabitByCategory(category: String): Flow<List<Habit>>
     suspend fun insertCategory(category: Category)
     fun getAllCategory(): Flow<List<Category>>
+    suspend fun insertDayInfo(dayInfo: DayInfo)
+    suspend fun updateDayInfo(dayInfo: DayInfo)
+    suspend fun deleteAllDaysInfo(uuid: String)
+    fun getHabitWithDays(id: Int): Flow<HabitWithDays>
+    fun getAllHabitWithDays(): Flow<List<HabitWithDays>>
 }

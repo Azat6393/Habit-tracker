@@ -5,12 +5,11 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.woynapp.aliskanlik.core.utils.getDaysDetail
 import com.woynapp.aliskanlik.databinding.ItemStartedHabitBinding
-import com.woynapp.aliskanlik.domain.model.Habit
+import com.woynapp.aliskanlik.domain.model.HabitWithDays
 
-class StartedHabitsAdapter(private val listener: AdapterItemListener<Habit>) :
-    ListAdapter<Habit, StartedHabitsAdapter.HabitViewHolder>(DiffCallBack) {
+class StartedHabitsAdapter(private val listener: AdapterItemListener<HabitWithDays>) :
+    ListAdapter<HabitWithDays, StartedHabitsAdapter.HabitViewHolder>(DiffCallBack) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): HabitViewHolder {
         return HabitViewHolder(
@@ -41,12 +40,12 @@ class StartedHabitsAdapter(private val listener: AdapterItemListener<Habit>) :
             }
         }
 
-        fun bind(item: Habit) {
+        fun bind(item: HabitWithDays) {
             _binding.apply {
-                nameTv.text = item.name
+                nameTv.text = item.habit.name
                 totalTv.text = item.days.size.toString()
-                val doneList = item.days.filter { it }
-                val mistakeList = getDaysDetail(item.days, item.started_date!!).filter { it == 2 }
+                val doneList = item.days.filter { it.type == 1 }
+                val mistakeList = item.days.filter { it.type == 2}
                 doneTv.text = doneList.size.toString()
                 mistakeTv.text = mistakeList.size.toString()
             }
@@ -54,12 +53,12 @@ class StartedHabitsAdapter(private val listener: AdapterItemListener<Habit>) :
     }
 
     companion object {
-        private val DiffCallBack = object : DiffUtil.ItemCallback<Habit>() {
-            override fun areItemsTheSame(oldItem: Habit, newItem: Habit): Boolean {
-                return oldItem.id == newItem.id
+        private val DiffCallBack = object : DiffUtil.ItemCallback<HabitWithDays>() {
+            override fun areItemsTheSame(oldItem: HabitWithDays, newItem: HabitWithDays): Boolean {
+                return oldItem.habit.id == newItem.habit.id
             }
 
-            override fun areContentsTheSame(oldItem: Habit, newItem: Habit): Boolean {
+            override fun areContentsTheSame(oldItem: HabitWithDays, newItem: HabitWithDays): Boolean {
                 return oldItem == newItem
             }
         }

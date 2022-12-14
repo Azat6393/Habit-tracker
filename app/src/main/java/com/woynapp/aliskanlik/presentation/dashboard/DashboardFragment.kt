@@ -11,8 +11,11 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.woynapp.aliskanlik.R
+import com.woynapp.aliskanlik.core.utils.toDays
 import com.woynapp.aliskanlik.databinding.FragmentDashboardBinding
+import com.woynapp.aliskanlik.domain.model.DayInfo
 import com.woynapp.aliskanlik.domain.model.Habit
+import com.woynapp.aliskanlik.domain.model.HabitWithDays
 import com.woynapp.aliskanlik.presentation.adapter.AdapterItemListener
 import com.woynapp.aliskanlik.presentation.adapter.StartedHabitsAdapter
 import dagger.hilt.android.AndroidEntryPoint
@@ -20,7 +23,8 @@ import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
-class DashboardFragment : Fragment(R.layout.fragment_dashboard), AdapterItemListener<Habit> {
+class DashboardFragment : Fragment(R.layout.fragment_dashboard),
+    AdapterItemListener<HabitWithDays> {
 
     private lateinit var _binding: FragmentDashboardBinding
     private val viewModel: DashboardViewModel by viewModels()
@@ -44,11 +48,41 @@ class DashboardFragment : Fragment(R.layout.fragment_dashboard), AdapterItemList
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.habits.collect { result ->
-                    mAdapter.submitList(result)
+                    mAdapter.submitList(result.map { updateDays(it) })
                 }
             }
         }
     }
+
+    private fun updateDays(habit: HabitWithDays): HabitWithDays {
+        val newDays = arrayListOf<DayInfo>()
+        val currentMl = System.currentTimeMillis()
+        val currentDayFromMl = currentMl.toDays()
+        val startedDayFromMl = habit.habit.started_date!!.toDays()
+        habit.days.forEach {
+            when (it.type) {
+                1 -> {
+                    newDays.add(it)
+                }
+                2 -> {
+                    newDays.add(it)
+                }
+                0 -> {
+                    val currentDay = currentDayFromMl - startedDayFromMl
+                    if (it.day < currentDay + 1) {
+                        val newDay = it.copy(type = 2)
+                        newDays.add(newDay).also {
+                            viewModel.updateDay(newDay)
+                        }
+                    } else {
+                        newDays.add(it)
+                    }
+                }
+            }
+        }
+        return habit.copy(days = newDays)
+    }
+
 
     private fun initRecyclerView() {
         _binding.recyclerView.apply {
@@ -58,8 +92,9 @@ class DashboardFragment : Fragment(R.layout.fragment_dashboard), AdapterItemList
         }
     }
 
-    override fun onClick(item: Habit) {
-        val action = DashboardFragmentDirections.actionDashboardFragmentToHabitDetailsFragment(item.id!!)
+    override fun onClick(item: HabitWithDays) {
+        val action =
+            DashboardFragmentDirections.actionDashboardFragmentToHabitDetailsFragment(item.habit.id!!)
         findNavController().navigate(action)
     }
 }
