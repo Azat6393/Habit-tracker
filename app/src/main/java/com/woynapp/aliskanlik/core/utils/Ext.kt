@@ -6,6 +6,7 @@ import android.widget.Toast
 import androidx.core.content.ContextCompat
 import com.google.gson.Gson
 import com.woynapp.aliskanlik.domain.model.Emoji
+import com.woynapp.aliskanlik.domain.model.Motivation
 import java.util.concurrent.TimeUnit
 
 
@@ -26,6 +27,11 @@ fun String.fromJsonToCountyList(): List<CountryInfo> {
 fun String.fromJsonToEmoji(): List<Emoji> {
     val gson = Gson()
     return gson.fromJson(this, Array<Emoji>::class.java).asList()
+}
+
+fun String.fromJsonToMotivation(): List<Motivation> {
+    val gson = Gson()
+    return gson.fromJson(this, Array<Motivation>::class.java).asList()
 }
 
 

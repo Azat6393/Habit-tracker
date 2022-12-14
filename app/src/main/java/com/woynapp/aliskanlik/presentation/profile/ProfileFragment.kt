@@ -2,6 +2,8 @@ package com.woynapp.aliskanlik.presentation.profile
 
 import android.Manifest
 import android.annotation.SuppressLint
+import android.content.Context
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Bundle
@@ -19,12 +21,10 @@ import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import com.squareup.picasso.Picasso
 import com.woynapp.aliskanlik.R
-import com.woynapp.aliskanlik.core.utils.Resource
-import com.woynapp.aliskanlik.core.utils.checkPermission
-import com.woynapp.aliskanlik.core.utils.showAlertDialog
-import com.woynapp.aliskanlik.core.utils.showToastMessage
+import com.woynapp.aliskanlik.core.utils.*
 import com.woynapp.aliskanlik.databinding.FragmentProfileBinding
 import com.woynapp.aliskanlik.domain.model.User
+import com.woynapp.aliskanlik.presentation.AuthActivity
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
@@ -95,7 +95,6 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
                 viewModel.uploadingResponse.collect { result ->
                     when (result) {
                         is Resource.Empty -> _binding.progressBar.isVisible = false
-
                         is Resource.Error -> _binding.progressBar.isVisible = false
                         is Resource.Loading -> _binding.progressBar.isVisible = true
                         is Resource.Success -> {
@@ -170,6 +169,9 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
                     getString(R.string.sign_out_message)
                 ) {
                     viewModel.signOut()
+                    val intent = Intent(requireActivity(), AuthActivity::class.java)
+                    requireActivity().startActivity(intent)
+                    requireActivity().finish()
                 }
             }
             aboutBtn.setOnClickListener {
@@ -179,11 +181,21 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
             websiteBtn.setOnClickListener { navigateToWebView("http://woynapp.com") }
             privacyPolictBtn.setOnClickListener { navigateToWebView("http://woynapp.com/gizlilik-politikasi/") }
             termOfService.setOnClickListener { navigateToWebView("http://woynapp.com/terms-of-service/") }
+
+            val mSharedPreferences =
+                requireActivity().getSharedPreferences(Constants.PREFERENCE_DATABASE_NAME, Context.MODE_PRIVATE)
+            val editor = mSharedPreferences.edit()
+            val isDarkMode = mSharedPreferences.getBoolean(Constants.PREFERENCE_DARK_MODE, false)
+            darkModeSwitch.isChecked = isDarkMode
             darkModeSwitch.setOnCheckedChangeListener { compoundButton, b ->
                 if (b) {
                     AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
+                    editor.putBoolean(Constants.PREFERENCE_DARK_MODE, true)
+                    editor.apply()
                 } else {
                     AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
+                    editor.putBoolean(Constants.PREFERENCE_DARK_MODE, false)
+                    editor.apply()
                 }
             }
         }

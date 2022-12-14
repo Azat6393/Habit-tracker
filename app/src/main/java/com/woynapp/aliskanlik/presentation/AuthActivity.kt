@@ -1,5 +1,6 @@
 package com.woynapp.aliskanlik.presentation
 
+import android.content.Context
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -10,6 +11,7 @@ import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.fragment.findNavController
 import com.woynapp.aliskanlik.R
+import com.woynapp.aliskanlik.core.utils.Constants
 import com.woynapp.aliskanlik.presentation.auth.AuthViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.first
@@ -22,6 +24,13 @@ class AuthActivity : AppCompatActivity() {
     private val viewModel: AuthViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        val mSharedPreferences =
+            getSharedPreferences(Constants.PREFERENCE_DATABASE_NAME, Context.MODE_PRIVATE)
+        val isDarkMode = mSharedPreferences.getBoolean(Constants.PREFERENCE_DARK_MODE, false)
+        if (isDarkMode)
+            setTheme(R.style.Theme_Aliskanlik_Dark)
+        else
+            setTheme(R.style.Theme_Aliskanlik_Light)
         super.onCreate(savedInstanceState)
 
         installSplashScreen().apply {

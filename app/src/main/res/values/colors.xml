@@ -18,11 +18,13 @@
     <color name="dark_tertiary">#818181</color>
     <color name="dark_surface">#3E3E3E</color>
     <color name="dark_background">#000000</color>
+    <color name="dark_background_color">#3C3C3C</color>
+
 
     <!-- Light theme colors -->
 
     <color name="light_primary">#2BA4E2</color>
-    <color name="light_secondary">#1C1C1C</color>
+    <color name="light_secondary">#000000</color>
     <color name="light_tertiary">#C9C9C9</color>
     <color name="light_surface">#E2E2E2</color>
     <color name="light_background">#FFFFFF</color>

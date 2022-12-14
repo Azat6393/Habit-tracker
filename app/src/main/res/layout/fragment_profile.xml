@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="?attr/background_color"
     tools:context=".presentation.profile.ProfileFragment">
 
 
@@ -71,7 +72,8 @@
                     android:background="@color/light_surface"
                     android:maxLines="1"
                     android:singleLine="true"
-                    android:textColor="?secondary_color"
+                    android:textColor="@color/black"
+                    android:enabled="false"
                     android:textSize="20sp"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toStartOf="@+id/edit_layout"
