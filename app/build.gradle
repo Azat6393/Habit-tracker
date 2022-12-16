@@ -10,11 +10,11 @@ plugins {
 }
 
 android {
-    namespace 'com.woynapp.aliskanlik'
+    namespace 'com.woynapp.wontto'
     compileSdk 33
 
     defaultConfig {
-        applicationId "com.woynapp.aliskanlik"
+        applicationId "com.woynapp.wontto"
         minSdk 21
         targetSdk 33
         versionCode 1

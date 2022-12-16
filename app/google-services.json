@@ -7,12 +7,20 @@
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:318115625526:android:7fc356a66f0f89b993b697",
+        "mobilesdk_app_id": "1:318115625526:android:7d62e704286d744693b697",
         "android_client_info": {
-          "package_name": "com.woynapp.aliskanlik"
+          "package_name": "com.woynapp.wontto"
         }
       },
       "oauth_client": [
+        {
+          "client_id": "318115625526-ojnidk6mo3uucj1nht08g81p0nbc23si.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.woynapp.wontto",
+            "certificate_hash": "bd3e1fdb3af98d694e370dc1f1e54184e488992d"
+          }
+        },
         {
           "client_id": "318115625526-9hfk3hi0gnv84vabammnpc0doausqovk.apps.googleusercontent.com",
           "client_type": 3

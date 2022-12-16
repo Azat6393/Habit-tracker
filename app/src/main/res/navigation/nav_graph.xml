@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/dashboardFragment"
-        android:name="com.woynapp.aliskanlik.presentation.dashboard.DashboardFragment"
+        android:name="com.woynapp.wontto.presentation.dashboard.DashboardFragment"
         android:label="fragment_dashboard"
         tools:layout="@layout/fragment_dashboard" >
         <action
@@ -16,22 +16,22 @@
     </fragment>
     <fragment
         android:id="@+id/categoryFragment"
-        android:name="com.woynapp.aliskanlik.presentation.category.CategoryFragment"
+        android:name="com.woynapp.wontto.presentation.category.CategoryFragment"
         android:label="fragment_category"
         tools:layout="@layout/fragment_category" />
     <fragment
         android:id="@+id/habitFragment"
-        android:name="com.woynapp.aliskanlik.presentation.add_habit.AddHabitFragment"
+        android:name="com.woynapp.wontto.presentation.add_habit.AddHabitFragment"
         android:label="fragment_add_habit"
         tools:layout="@layout/fragment_add_habit" />
     <fragment
         android:id="@+id/motivationFragment"
-        android:name="com.woynapp.aliskanlik.presentation.motivation.MotivationFragment"
+        android:name="com.woynapp.wontto.presentation.motivation.MotivationFragment"
         android:label="fragment_motivation"
         tools:layout="@layout/fragment_motivation" />
     <fragment
         android:id="@+id/profileFragment"
-        android:name="com.woynapp.aliskanlik.presentation.profile.ProfileFragment"
+        android:name="com.woynapp.wontto.presentation.profile.ProfileFragment"
         android:label="fragment_profile"
         tools:layout="@layout/fragment_profile" >
         <action
@@ -43,7 +43,7 @@
     </fragment>
     <fragment
         android:id="@+id/habitDetailsFragment"
-        android:name="com.woynapp.aliskanlik.presentation.habit_dateils.HabitDetailsFragment"
+        android:name="com.woynapp.wontto.presentation.habit_dateils.HabitDetailsFragment"
         android:label="HabitDetailsFragment" >
         <argument
             android:name="habitId"
@@ -51,7 +51,7 @@
     </fragment>
     <fragment
         android:id="@+id/webViewFragment"
-        android:name="com.woynapp.aliskanlik.presentation.auth.WebViewFragment"
+        android:name="com.woynapp.wontto.presentation.auth.WebViewFragment"
         android:label="WebViewFragment" >
         <argument
             android:name="url"
@@ -59,6 +59,6 @@
     </fragment>
     <fragment
         android:id="@+id/aboutUsFragment"
-        android:name="com.woynapp.aliskanlik.presentation.profile.AboutUsFragment"
+        android:name="com.woynapp.wontto.presentation.profile.AboutUsFragment"
         android:label="AboutUsFragment" />
 </navigation>

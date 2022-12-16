@@ -1,5 +1,8 @@
 <resources>
-    <string name="app_name">Aliskanlik</string>
+    <string name="app_name">Wont To</string>
+    <string name="reminders_notification_channel_id">aliskanlik_notification_id</string>
+    <string name="reminders_notification_channel_name">aliskanlik_notification_channel</string>
+
     <string name="dashboard">Dashboard</string>
     <string name="category">Category</string>
     <string name="motivation">Motivation</string>
@@ -32,14 +35,12 @@
     <string name="delete_habit">Delete habit</string>
     <string name="delete_habit_message">Are you sure to delete the habit?</string>
     <string name="restart_habit_message">Are you sure to restart habit</string>
-    <string name="title_notification_reminder">Time to get new habit</string>
-    <string name="description_notification_reminder">description notification reminder</string>
-    <string name="reminders_notification_channel_id">aliskanlik_notification_id</string>
-    <string name="reminders_notification_channel_name">aliskanlik_notification_channel</string>
+    <string name="title_notification_reminder">It\'s time to </string>
+    <string name="description_notification_reminder">To get new habit</string>
     <string name="ok">Ok</string>
-    <string name="permission_required_for_alarm">Without this permission app cannot show alarm</string>
+    <string name="permission_required_for_alarm">Without this permission app cannot show alert</string>
     <string name="login_with_google">Log in with Google</string>
-    <string name="sign_in">Sing in</string>
+    <string name="sign_in">Sign in</string>
     <string name="sign_up">Sign up</string>
     <string name="enter_your_email_address_and_password">Enter your email and password</string>
     <string name="enter_your_email_address">Enter your email address</string>
@@ -64,4 +65,37 @@
     <string name="about_us_text">By combining user-friendly designs with up-to-date and innovative technologies, we offer compatible and convenient applications free of charge.</string>
     <string name="already_done_text">You already done for today</string>
     <string name="select_emoji_message">Please choose emoji for habit</string>
+
+
+    <string name="education_category">Education</string>
+    <string name="health_category">Health</string>
+    <string name="sport_category">Sport</string>
+    <string name="system_category">System</string>
+    <string name="learn_new_language">Learn new language</string>
+    <string name="learn_new_language_description">A new language, increase access to information and personal development</string>
+    <string name="regular_book_reading">Regular book reading</string>
+    <string name="regular_book_reading_description">Do you want to gain the habit of reading books? you are at the right place. We will remind you everyday that you should read a book</string>
+    <string name="studying">Studying</string>
+    <string name="studying_description">Stress is real, so is procrastination, learn to work effectively in 21 days</string>
+    <string name="quit_smoking">Quit smoking</string>
+    <string name="quit_smoking_description">There is a beautiful life waiting for you</string>
+    <string name="meditation">Meditation</string>
+    <string name="meditation_description">It is a commitment to meditate at a certain time every day for 21 days.</string>
+    <string name="drop_sugar">Drop sugar</string>
+    <string name="drop_sugar_description">Say hello to a sugar free life</string>
+    <string name="drinking_water">Drinking lots of water</string>
+    <string name="drinking_water_description">Drinking water is healthy and necessary</string>
+    <string name="stop_drinking_coffee">Stop drinking coffee</string>
+    <string name="srop_dringking_coffee_descriotion">Get rid of the harms of coffee</string>
+    <string name="work_out">Work out</string>
+    <string name="work_out_description">Healthy living by work out</string>
+    <string name="work_out_at_home">Work out at home</string>
+    <string name="work_out_at_home_description">Stay physically healthy with this home workout</string>
+    <string name="time_management">Time management</string>
+    <string name="time_management_description">Allows you to control the time spent on certain activities in an emphatic way to increase productivity and efficiency.</string>
+    <string name="wake_up_early">Wake up early</string>
+    <string name="wake_up_early_description">Prefer to wake up early to spend your day more efficiently.</string>
+    <string name="regular_sleep">Regular sleep</string>
+    <string name="regular_sleep_description">Looking for ways to improve your sleep quality? Wanna wake up early and go to bed early? Here we suggest 21 strategies for you</string>
+
 </resources>

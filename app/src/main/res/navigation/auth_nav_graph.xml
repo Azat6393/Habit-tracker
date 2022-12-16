@@ -6,7 +6,7 @@
 
     <fragment
         android:id="@+id/verifyNumberFragment"
-        android:name="com.woynapp.aliskanlik.presentation.auth.VerifyNumberFragment"
+        android:name="com.woynapp.wontto.presentation.auth.VerifyNumberFragment"
         android:label="VerifyNumberFragment" >
         <argument
             android:name="userId"
@@ -17,7 +17,7 @@
     </fragment>
     <fragment
         android:id="@+id/authFragment"
-        android:name="com.woynapp.aliskanlik.presentation.auth.AuthFragment"
+        android:name="com.woynapp.wontto.presentation.auth.AuthFragment"
         android:label="AuthFragment" >
         <action
             android:id="@+id/action_authFragment_to_verifyNumberFragment"
@@ -31,7 +31,7 @@
     </fragment>
     <fragment
         android:id="@+id/signInFragment"
-        android:name="com.woynapp.aliskanlik.presentation.auth.SignInFragment"
+        android:name="com.woynapp.wontto.presentation.auth.SignInFragment"
         android:label="SignInFragment" >
         <action
             android:id="@+id/action_signInFragment_to_verifyNumberFragment"
@@ -42,7 +42,7 @@
     </fragment>
     <fragment
         android:id="@+id/signUpFragment"
-        android:name="com.woynapp.aliskanlik.presentation.auth.SignUpFragment"
+        android:name="com.woynapp.wontto.presentation.auth.SignUpFragment"
         android:label="SignUpFragment" >
         <action
             android:id="@+id/action_signUpFragment_to_verifyNumberFragment"
