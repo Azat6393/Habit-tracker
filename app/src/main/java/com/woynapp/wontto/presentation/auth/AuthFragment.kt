@@ -48,16 +48,18 @@ class AuthFragment : Fragment(R.layout.fragment_auth) {
         observe()
     }
 
+    override fun onResume() {
+        super.onResume()
+        isLoading(false)
+    }
+
     private fun initView() {
         _binding.apply {
             signUpBtn.setOnClickListener {
                 val action = AuthFragmentDirections.actionAuthFragmentToSignUpFragment()
                 findNavController().navigate(action)
             }
-            signInBtn.setOnClickListener {
-                val action = AuthFragmentDirections.actionAuthFragmentToSignInFragment()
-                findNavController().navigate(action)
-            }
+            signInBtn.setOnClickListener { logIn() }
             loginWithGoogleBtn.setOnClickListener {
                 initGoogleSignInRequest()
                 beginSignIn()
@@ -103,7 +105,6 @@ class AuthFragment : Fragment(R.layout.fragment_auth) {
                         }
                         is Resource.Loading -> isLoading(true)
                         is Resource.Success -> {
-                            isLoading(false)
                             if (it.data?.phone_number?.isNotBlank() == true
                             ) {
                                 val intent = Intent(requireActivity(), MainActivity::class.java)
@@ -113,6 +114,40 @@ class AuthFragment : Fragment(R.layout.fragment_auth) {
 
                             } else {
                                 viewModel.clearSignUpResponse()
+                                it.data?.id?.let { id ->
+                                    val action =
+                                        AuthFragmentDirections.actionAuthFragmentToVerifyNumberFragment(
+                                            id
+                                        )
+                                    findNavController().navigate(action)
+                                    isLoading(false)
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.signInResponse.collect {
+                    when (it) {
+                        is Resource.Empty -> isLoading(false)
+                        is Resource.Error -> {
+                            isLoading(false)
+                            it.message?.let { it1 -> requireContext().showToastMessage(it1) }
+                        }
+                        is Resource.Loading -> isLoading(true)
+                        is Resource.Success -> {
+                            isLoading(false)
+                            if (it.data?.phone_number?.isNotBlank() == true
+                            ) {
+                                val intent = Intent(requireActivity(), MainActivity::class.java)
+                                startActivity(intent)
+                                isLoading(false)
+                                requireActivity().finish()
+                            } else {
+                                viewModel.clearSignInResponse()
                                 it.data?.id?.let { id ->
                                     val action =
                                         AuthFragmentDirections.actionAuthFragmentToVerifyNumberFragment(
@@ -131,7 +166,7 @@ class AuthFragment : Fragment(R.layout.fragment_auth) {
     private fun isLoading(state: Boolean) {
         _binding.apply {
             progressBar.isVisible = state
-            loginWithGoogleBtn.visibility = if (state) View.INVISIBLE else View.VISIBLE
+            logInContainer.visibility = if (state) View.INVISIBLE else View.VISIBLE
         }
     }
 
@@ -223,6 +258,30 @@ class AuthFragment : Fragment(R.layout.fragment_auth) {
                     }
                     requireContext().showToastMessage("Error is: ${e.localizedMessage}")
                 }
+            }
+        }
+    }
+
+    private fun logIn() {
+        if (isAllInputsFilled()) {
+            viewModel.signInWithEmail(
+                email = _binding.emailEt.text.toString(),
+                password = _binding.passwordEt.text.toString(),
+            )
+        }
+    }
+    private fun isAllInputsFilled(): Boolean {
+        return when {
+            _binding.emailEt.text.toString().isBlank() -> {
+                requireContext().showToastMessage(getString(R.string.input_email_address))
+                return false
+            }
+            _binding.passwordEt.text.toString().isBlank() -> {
+                requireContext().showToastMessage(getString(R.string.input_password))
+                return false
+            }
+            else -> {
+                true
             }
         }
     }

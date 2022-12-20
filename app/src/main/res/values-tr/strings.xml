@@ -18,7 +18,7 @@
     <string name="about_us">Hakkımızda</string>
     <string name="website">Uygulama web sitesi</string>
     <string name="sign_out">Çıkış</string>
-    <string name="term_of_service">Hizmet Şartı</string>
+    <string name="term_of_service">Hizmet Şartları</string>
     <string name="privacy_policy">Gizlilik politikası</string>
     <string name="save">Kaydet</string>
     <string name="total">Toplam</string>
@@ -97,5 +97,6 @@
     <string name="wake_up_early_description">Gününüzü daha verimli geçirmek için erken kalkmayı tercih edin.</string>
     <string name="regular_sleep">Düzenli uyku</string>
     <string name="regular_sleep_description">Uyku kaliteni iyileştirmenin yollarını mı arıyorsun? Erken kalkıp erken yatmak ister misin? İşte size 21 strateji öneriyoruz</string>
+    <string name="start_challenge_message">Bu alışkanlığa başlamak istiyor musunuz?</string>
 
 </resources>

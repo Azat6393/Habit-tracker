@@ -97,5 +97,6 @@
     <string name="wake_up_early_description">Prefer to wake up early to spend your day more efficiently.</string>
     <string name="regular_sleep">Regular sleep</string>
     <string name="regular_sleep_description">Looking for ways to improve your sleep quality? Wanna wake up early and go to bed early? Here we suggest 21 strategies for you</string>
+    <string name="start_challenge_message">Do you want to start this challenge?</string>
 
 </resources>

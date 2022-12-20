@@ -79,7 +79,7 @@ class CategoryFragment : Fragment(R.layout.fragment_category), AdapterItemListen
     override fun onClick(item: Habit) {
         val alertDialog = AlertDialog.Builder(requireContext())
         alertDialog.setTitle(item.name)
-        alertDialog.setMessage("Do you want to start this challenge?")
+        alertDialog.setMessage(getString(R.string.start_challenge_message))
         alertDialog.setPositiveButton(getString(R.string.yes)) { _, _ ->
             viewModel.updateHabit(item.copy(started = true, started_date = System.currentTimeMillis()))
         }

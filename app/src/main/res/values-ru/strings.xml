@@ -97,4 +97,5 @@
     <string name="wake_up_early_description">Предпочитаю просыпаться рано, чтобы провести день более эффективно.</string>
     <string name="regular_sleep">Регулярный сон</string>
     <string name="regular_sleep_description">Ищете способы улучшить качество сна? Хотите рано вставать и рано ложиться? Здесь мы предлагаем вам 21 стратегию</string>
+    <string name="start_challenge_message">Вы хотите завести эту привычку?</string>
 </resources>
