@@ -1,29 +1,39 @@
 package com.woynapp.wontto.presentation.add_habit
 
+import android.annotation.SuppressLint
+import android.app.AlarmManager
+import android.app.NotificationChannel
+import android.app.NotificationManager
+import android.app.TimePickerDialog
+import android.content.Intent
+import android.os.Build
 import android.os.Bundle
+import android.provider.Settings
 import android.view.View
 import android.widget.SeekBar
 import android.widget.Toast
+import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import androidx.navigation.fragment.findNavController
+import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.snackbar.Snackbar
 import com.woynapp.wontto.R
-import com.woynapp.wontto.core.utils.Constants
-import com.woynapp.wontto.core.utils.fromJsonToEmoji
-import com.woynapp.wontto.core.utils.getJsonFromAssets
+import com.woynapp.wontto.core.notification.RemindersManager
+import com.woynapp.wontto.core.utils.*
 import com.woynapp.wontto.databinding.FragmentAddHabitBinding
 import com.woynapp.wontto.domain.model.Category
 import com.woynapp.wontto.domain.model.Habit
 import com.woynapp.wontto.presentation.adapter.CategoryAdapter
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
-import java.util.UUID
-
+import java.util.*
 
 @AndroidEntryPoint
 class AddHabitFragment : Fragment(R.layout.fragment_add_habit),
@@ -32,9 +42,12 @@ class AddHabitFragment : Fragment(R.layout.fragment_add_habit),
     private lateinit var _binding: FragmentAddHabitBinding
     private val categoryAdapter: CategoryAdapter by lazy { CategoryAdapter(this) }
     private val viewModel: AddHabitViewModel by viewModels()
+    private val args: AddHabitFragmentArgs by navArgs()
 
     private var selectedCategory: String? = null
     private var selectedEmoji: String? = null
+
+    private var selectedTime: String? = null
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -44,37 +57,25 @@ class AddHabitFragment : Fragment(R.layout.fragment_add_habit),
 
         _binding.saveBtn.setOnClickListener {
             if (checkForValidHabit()) {
-                val name = _binding.habitNameInputLayout.editText?.text.toString()
-                val description = _binding.habitDescriptionInputLayout.editText?.text.toString()
-                val daySize = _binding.daysSeekBar.progress
-                val habit = Habit(
-                    name = name,
-                    description = description,
-                    started = false,
-                    category = selectedCategory!!,
-                    day_size = daySize,
-                    uuid = UUID.randomUUID().toString(),
-                    emoji = selectedEmoji!!
-                )
-                viewModel.addHabit(habit)
+                val habit = getHabit()
+                if (args.habit == null){
+                    viewModel.addHabit(habit)
+                }else{
+                    viewModel.updateHabit(habit)
+                }
                 clearViews()
-                Snackbar.make(
-                    _binding.root,
-                    getString(R.string.habit_saved_successfully),
-                    Snackbar.LENGTH_SHORT
-                )
-                    .show()
+                showAd()
             }
         }
         _binding.emojiContainer.setOnClickListener {
-            val emojiList =  getJsonFromAssets(
+            val emojiList = getJsonFromAssets(
                 requireContext(),
                 Constants.emojiListJsonName
             )?.fromJsonToEmoji()
             emojiList?.let { list ->
                 EmojiBottomSheet(
                     list
-                ){
+                ) {
                     selectedEmoji = it
                     _binding.emojiTv.text = selectedEmoji
                     _binding.emojiIg.isVisible = false
@@ -82,16 +83,82 @@ class AddHabitFragment : Fragment(R.layout.fragment_add_habit),
                 }.show(childFragmentManager, "Emoji bottom sheet")
             }
         }
-
+        _binding.alertBtn.setOnClickListener { showTimePicker() }
 
         initRecyclerViews()
         observe()
+    }
+
+    private fun initHabitIfExist() {
+        args.habit?.let {
+            _binding.habitNameInputLayout.editText?.setText(it.name)
+            _binding.daySize.text = it.day_size.toString()
+            _binding.daysSeekBar.progress = it.day_size
+            _binding.emojiTv.text = it.emoji
+            _binding.emojiTv.isVisible = true
+            _binding.emojiIg.isVisible = false
+            selectedCategory = it.category
+            selectedEmoji = it.emoji
+            categoryAdapter.setSelectedCategory(it.category)
+        }
+    }
+
+    private fun getHabit(): Habit {
+        val name = _binding.habitNameInputLayout.editText?.text.toString()
+        val description = _binding.habitDescriptionInputLayout.editText?.text.toString()
+        val daySize = _binding.daysSeekBar.progress
+        val uuid = UUID.randomUUID().toString()
+        if (args.habit == null) {
+            return Habit(
+                name = name,
+                description = description,
+                started = true,
+                started_date = System.currentTimeMillis(),
+                category = selectedCategory!!,
+                day_size = daySize,
+                uuid = uuid,
+                emoji = selectedEmoji!!,
+                alert_on = true,
+                alert_time = selectedTime!!
+            )
+        }
+        return args.habit!!.copy(
+            description = description,
+            started = true,
+            started_date = System.currentTimeMillis(),
+            category = selectedCategory!!,
+            day_size = daySize,
+            emoji = selectedEmoji!!,
+            alert_time = selectedTime,
+            alert_on = true
+        )
+    }
+
+    private fun showAd() {
+        PopUpDialog(
+            onClose = {
+                Snackbar.make(
+                    _binding.root,
+                    getString(R.string.habit_saved_successfully),
+                    Snackbar.LENGTH_SHORT
+                ).show()
+            },
+            onClick = {
+                val action =
+                    AddHabitFragmentDirections.actionHabitFragmentToWebViewFragment(
+                        Constants.KARGO_BUL_URL
+                    )
+                findNavController().navigate(action)
+            }
+        ).show(childFragmentManager, "Ad Pop up")
     }
 
     private fun clearViews() {
         _binding.apply {
             _binding.habitNameInputLayout.editText?.setText("")
             _binding.habitDescriptionInputLayout.editText?.setText("")
+            selectedTime = null
+            timeTv.text = getString(R.string.time)
         }
     }
 
@@ -101,7 +168,19 @@ class AddHabitFragment : Fragment(R.layout.fragment_add_habit),
                 viewModel.categories.collect { result ->
                     val categoryList = arrayListOf<Category>(Category(name = ""))
                     categoryList.addAll(result)
-                    categoryAdapter.submitList(categoryList)
+                    categoryAdapter.submitList(categoryList).also {
+                        initHabitIfExist()
+                    }
+                }
+            }
+        }
+        lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.addedHabit.collect { habit ->
+                    if (habit != null) {
+                        alertOn(habit.id!!)
+                    }
+                    clearViews()
                 }
             }
         }
@@ -167,7 +246,104 @@ class AddHabitFragment : Fragment(R.layout.fragment_add_habit),
                 ).show()
                 return false
             }
+            selectedTime.isNullOrBlank() -> {
+                requireContext().showToastMessage(
+                    getString(R.string.select_time_message)
+                )
+                return false
+            }
         }
         return true
+    }
+
+    override fun onLongClick(item: Category) {
+        showAlertDialog(
+            requireContext(),
+            getString(R.string.delete_category),
+            getString(R.string.delete_category_message)
+        ) {
+            viewModel.deleteCategory(item)
+        }
+    }
+
+    @SuppressLint("SetTextI18n")
+    private fun showTimePicker() {
+        val c = Calendar.getInstance()
+        val hour = c.get(Calendar.HOUR_OF_DAY)
+        val minute = c.get(Calendar.MINUTE)
+        val timePickerDialog = TimePickerDialog(
+            requireContext(),
+            { _, hourOfDay, minute ->
+                selectedTime = "$hourOfDay:$minute"
+                _binding.timeTv.text = "${getString(R.string.time)} $selectedTime"
+            },
+            hour,
+            minute,
+            false
+        )
+        timePickerDialog.show()
+    }
+
+    private fun alertOn(id: Int) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            val alarmManager = ContextCompat.getSystemService(
+                requireContext(),
+                AlarmManager::class.java
+            )
+            if (alarmManager?.canScheduleExactAlarms() == false) {
+                Intent().also { intent ->
+                    intent.action = Settings.ACTION_REQUEST_SCHEDULE_EXACT_ALARM
+                    requireContext().startActivity(intent)
+                }
+            } else {
+                createNotificationsChannels()
+                RemindersManager.startReminder(
+                    requireContext(),
+                    reminderTime = selectedTime!!,
+                    reminderId = id,
+                    message = _binding.habitNameInputLayout.editText?.text?.toString()!!
+                )
+            }
+        } else {
+            createNotificationsChannels()
+            RemindersManager.startReminder(
+                requireContext(),
+                reminderTime = selectedTime!!,
+                reminderId = id,
+                message = _binding.habitNameInputLayout.editText?.text?.toString()!!
+            )
+        }
+    }
+
+    private fun createNotificationsChannels() {
+        val channel = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            NotificationChannel(
+                getString(R.string.reminders_notification_channel_id),
+                getString(R.string.reminders_notification_channel_name),
+                NotificationManager.IMPORTANCE_HIGH
+            )
+        } else {
+            TODO("VERSION.SDK_INT < O")
+        }
+        ContextCompat.getSystemService(requireContext(), NotificationManager::class.java)
+            ?.createNotificationChannel(channel)
+    }
+
+    override fun onStart() {
+        super.onStart()
+        if (args.habit != null){
+            requireActivity()
+                .findViewById<BottomNavigationView>(R.id.bottom_navigation_view)
+                .visibility = View.GONE
+        }
+    }
+
+    override fun onStop() {
+        super.onStop()
+        if (args.habit != null){
+            requireActivity()
+                .findViewById<BottomNavigationView>(R.id.bottom_navigation_view)
+                .visibility = View.VISIBLE
+        }
     }
 }

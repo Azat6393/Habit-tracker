@@ -27,13 +27,16 @@ interface HabitDao {
     @Query("SELECT * FROM habit WHERE started = 1")
     fun getStartedHabits(): Flow<List<Habit>>
 
-    @Query("SELECT * FROM habit WHERE started = 0")
+    @Query("SELECT * FROM habit")
     fun getAllHabits(): Flow<List<Habit>>
 
     @Query("SELECT * FROM habit WHERE id = :id")
     fun getHabitById(id: Int): Flow<Habit>
 
-    @Query("SELECT * FROM habit WHERE category =:category AND started = 0")
+    @Query("SELECT * FROM habit WHERE id = :uuid")
+    fun getHabitByUUID(uuid: String): Flow<Habit>
+
+    @Query("SELECT * FROM habit WHERE category =:category")
     fun getHabitByCategory(category: String): Flow<List<Habit>>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
@@ -56,4 +59,7 @@ interface HabitDao {
 
     @Query("SELECT * FROM habit WHERE started = 1")
     fun getAllHabitWithDays(): Flow<List<HabitWithDays>>
+
+    @Delete
+    suspend fun deleteCategory(category: Category)
 }

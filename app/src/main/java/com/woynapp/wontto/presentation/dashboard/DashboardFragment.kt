@@ -12,18 +12,19 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.woynapp.wontto.R
+import com.woynapp.wontto.core.utils.Constants
 import com.woynapp.wontto.core.utils.toDays
 import com.woynapp.wontto.databinding.FragmentDashboardBinding
 import com.woynapp.wontto.domain.model.DayInfo
 import com.woynapp.wontto.domain.model.HabitWithDays
-import com.woynapp.wontto.presentation.adapter.AdapterItemListener
 import com.woynapp.wontto.presentation.adapter.StartedHabitsAdapter
+import com.woynapp.wontto.presentation.adapter.StartedHabitsItemListener
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class DashboardFragment : Fragment(R.layout.fragment_dashboard),
-    AdapterItemListener<HabitWithDays> {
+    StartedHabitsItemListener {
 
     private lateinit var _binding: FragmentDashboardBinding
     private val viewModel: DashboardViewModel by viewModels()
@@ -33,11 +34,6 @@ class DashboardFragment : Fragment(R.layout.fragment_dashboard),
         super.onViewCreated(view, savedInstanceState)
         _binding = FragmentDashboardBinding.bind(view)
         observeUser()
-        _binding.newHabit.setOnClickListener {
-            requireActivity()
-                .findViewById<BottomNavigationView>(R.id.bottom_navigation_view)
-                .selectedItemId = R.id.habitFragment
-        }
 
         initRecyclerView()
         observe()
@@ -106,6 +102,14 @@ class DashboardFragment : Fragment(R.layout.fragment_dashboard),
     override fun onClick(item: HabitWithDays) {
         val action =
             DashboardFragmentDirections.actionDashboardFragmentToHabitDetailsFragment(item.habit.id!!)
+        findNavController().navigate(action)
+    }
+
+    override fun onClickAd() {
+        val action =
+            DashboardFragmentDirections.actionDashboardFragmentToWebViewFragment(
+                Constants.KARGO_BUL_URL
+            )
         findNavController().navigate(action)
     }
 }

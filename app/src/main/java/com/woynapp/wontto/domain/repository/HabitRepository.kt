@@ -21,4 +21,6 @@ interface HabitRepository {
     suspend fun deleteAllDaysInfo(uuid: String)
     fun getHabitWithDays(id: Int): Flow<HabitWithDays>
     fun getAllHabitWithDays(): Flow<List<HabitWithDays>>
+    suspend fun deleteCategory(category: Category)
+    fun getHabitByUUID(uuid: String): Flow<Habit>
 }

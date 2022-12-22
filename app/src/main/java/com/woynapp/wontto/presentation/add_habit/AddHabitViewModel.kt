@@ -9,6 +9,7 @@ import com.woynapp.wontto.domain.repository.HabitRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
+import java.util.UUID
 import javax.inject.Inject
 
 @HiltViewModel
@@ -19,12 +20,51 @@ class AddHabitViewModel @Inject constructor(
     private val _categories = MutableStateFlow<List<Category>>(emptyList())
     val categories = _categories.asStateFlow()
 
+    private val _addedHabit = MutableStateFlow<Habit?>(null)
+    val addedHabit = _addedHabit.asStateFlow()
+
     init {
         getAllCategory()
     }
 
     fun addHabit(habit: Habit) = viewModelScope.launch {
-        repo.insertHabit(habit)
+        repo.insertHabit(habit).also {
+            getHabitByUUID(habit.uuid)
+        }.also {
+            for (i in 1..habit.day_size) {
+                repo.insertDayInfo(
+                    DayInfo(
+                        habit_uuid = habit.uuid,
+                        day = i,
+                        type = 0
+                    )
+                )
+            }
+        }
+    }
+
+    fun updateHabit(habit: Habit) = viewModelScope.launch {
+        repo.updateHabit(habit).also {
+            for (i in 1..habit.day_size) {
+                repo.insertDayInfo(
+                    DayInfo(
+                        habit_uuid = habit.uuid,
+                        day = i,
+                        type = 0
+                    )
+                )
+            }
+        }
+    }
+
+    private fun getHabitByUUID(uuid: String) = viewModelScope.launch{
+        repo.getHabitByUUID(uuid).onEach {
+            _addedHabit.value = it
+        }.launchIn(viewModelScope)
+    }
+
+    fun clearHabitFlow(){
+        _addedHabit.value = null
     }
 
     private fun getAllCategory() = viewModelScope.launch {
@@ -35,5 +75,9 @@ class AddHabitViewModel @Inject constructor(
 
     fun addCategory(category: Category) = viewModelScope.launch {
         repo.insertCategory(category)
+    }
+
+    fun deleteCategory(category: Category) = viewModelScope.launch {
+        repo.deleteCategory(category)
     }
 }

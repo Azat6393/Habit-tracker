@@ -91,6 +91,10 @@ class SignUpFragment : Fragment(R.layout.fragment_sign_up) {
                 requireContext().showToastMessage(getString(R.string.input_password))
                 return false
             }
+            _binding.passwordEt.text.toString().length <= 5 -> {
+                requireContext().showToastMessage(getString(R.string.password_characters_error))
+                return false
+            }
             _binding.nameEt.text.toString().isBlank() -> {
                 requireContext().showToastMessage(getString(R.string.input_first_name))
                 return false

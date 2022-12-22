@@ -22,4 +22,6 @@ object Constants {
     const val PREFERENCE_LAST_MOTIVATION_DATE = "last_motivation_date"
     const val PREFERENCE_MOTIVATION_TEXT = "motivation_text"
     const val PREFERENCE_MOTIVATION_WRITER = "motivation_writer"
+
+    const val KARGO_BUL_URL = "https://www.kargobul.com.tr/"
 }

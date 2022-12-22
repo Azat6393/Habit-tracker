@@ -29,14 +29,14 @@
     <string name="yes">Evet</string>
     <string name="no">Hayır</string>
     <string name="habit_saved_successfully">Alışkanlık başarıyla kaydedildi</string>
-    <string name="alertOn">Bildirimi Aç</string>
+    <string name="alertOn">Alarmı Aç</string>
     <string name="delete">Sil</string>
     <string name="restart">Yeniden Başlat</string>
-    <string name="alertOff">Bildirimi Kapat</string>
+    <string name="alertOff">Alarmı Kapat</string>
     <string name="delete_habit">Alışkanlığı sil</string>
     <string name="delete_habit_message">Alışkanlığı silmek istediğinizden emin misiniz?</string>
     <string name="restart_habit_message">Alışkanlığı yeniden başlatmak istediğinizden emin misiniz</string>
-    <string name="title_notification_reminder">Zaman geldi</string>
+    <string name="title_notification_reminder">Zamanı geldi</string>
     <string name="description_notification_reminder">Yeni bir alışkanlık edinmek için</string>
     <string name="ok">Tamam</string>
     <string name="permission_required_for_alarm">Bu izin olmadan uygulama bildirim gösteremez</string>
@@ -50,7 +50,7 @@
     <string name="forgot_password">ŞİFREMİ UNUTTUM</string>
     <string name="name">Ad</string>
     <string name="last_name">Soyadı</string>
-    <string name="enter_your_name">Tam adınızı ve e-posta adresinizi girinşiz</string>
+    <string name="enter_your_name">Tam adınızı ve e-posta adresinizi giriniz</string>
     <string name="verify_your_phone_number">Telefon numaranız nedir?</string>
     <string name="phone_number">Telefon numarası</string>
     <string name="continue_text">Devam</string>
@@ -98,5 +98,9 @@
     <string name="regular_sleep">Düzenli uyku</string>
     <string name="regular_sleep_description">Uyku kaliteni iyileştirmenin yollarını mı arıyorsun? Erken kalkıp erken yatmak ister misin? İşte size 21 strateji öneriyoruz</string>
     <string name="start_challenge_message">Bu alışkanlığa başlamak istiyor musunuz?</string>
+    <string name="password_characters_error">Parola en az 6 karakter olmalıdır</string>
+    <string name="delete_category">Kategoriyi sil</string>
+    <string name="delete_category_message">Kategoriyi silmek istediğinizden emin misiniz?</string>
+    <string name="days">günler</string>
 
 </resources>

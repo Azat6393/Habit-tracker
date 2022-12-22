@@ -8,9 +8,12 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.woynapp.wontto.R
+import com.woynapp.wontto.core.utils.showAlertDialog
 import com.woynapp.wontto.databinding.FragmentCategoryBinding
 import com.woynapp.wontto.domain.model.Category
 import com.woynapp.wontto.domain.model.Habit
@@ -46,8 +49,6 @@ class CategoryFragment : Fragment(R.layout.fragment_category), AdapterItemListen
                 viewModel.categories.collect { result ->
                     val categoryList = arrayListOf<Category>(Category(name = ""))
                     categoryList.addAll(result)
-                    println(result)
-                    println(categoryList)
                     categoryAdapter.submitList(categoryList)
                 }
             }
@@ -77,14 +78,22 @@ class CategoryFragment : Fragment(R.layout.fragment_category), AdapterItemListen
     }
 
     override fun onClick(item: Habit) {
-        val alertDialog = AlertDialog.Builder(requireContext())
-        alertDialog.setTitle(item.name)
-        alertDialog.setMessage(getString(R.string.start_challenge_message))
-        alertDialog.setPositiveButton(getString(R.string.yes)) { _, _ ->
-            viewModel.updateHabit(item.copy(started = true, started_date = System.currentTimeMillis()))
+        if (item.started) {
+            val action =
+                CategoryFragmentDirections.actionCategoryFragmentToHabitDetailsFragment(item.id!!)
+            findNavController().navigate(action)
+        } else {
+            val alertDialog = AlertDialog.Builder(requireContext())
+            alertDialog.setTitle(item.name)
+            alertDialog.setMessage(getString(R.string.start_challenge_message))
+            alertDialog.setPositiveButton(getString(R.string.yes)) { _, _ ->
+                val action =
+                    CategoryFragmentDirections.actionCategoryFragmentToHabitFragment(item)
+                findNavController().navigate(action)
+            }
+            alertDialog.setNegativeButton(getString(R.string.no)) { _, _ -> }
+            alertDialog.show()
         }
-        alertDialog.setNegativeButton(getString(R.string.no)) { _, _ -> }
-        alertDialog.show()
     }
 
     override fun addCategory() {
@@ -96,12 +105,22 @@ class CategoryFragment : Fragment(R.layout.fragment_category), AdapterItemListen
     private var selectedCategory: String? = null
 
     override fun onClick(item: Category) {
-        if (selectedCategory == item.name){
+        if (selectedCategory == item.name) {
             viewModel.getAllHabits()
             selectedCategory = null
-        }else {
+        } else {
             selectedCategory = item.name
             viewModel.getHabitByCategory(item.name)
+        }
+    }
+
+    override fun onLongClick(item: Category) {
+        showAlertDialog(
+            requireContext(),
+            getString(R.string.delete_category),
+            getString(R.string.delete_category_message)
+        ) {
+            viewModel.deleteCategory(item)
         }
     }
 }

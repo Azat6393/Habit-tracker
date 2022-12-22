@@ -1,8 +1,11 @@
 package com.woynapp.wontto.domain.model
 
+import android.os.Parcelable
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import kotlinx.android.parcel.Parcelize
 
+@Parcelize
 @Entity(tableName = "habit")
 data class Habit(
     @PrimaryKey(autoGenerate = true)
@@ -14,7 +17,9 @@ data class Habit(
     val category: String,
     val day_size: Int,
     val uuid: String,
-    val emoji: String
-)
+    val emoji: String,
+    val alert_on: Boolean = false,
+    val alert_time: String? = null
+): Parcelable
 
 

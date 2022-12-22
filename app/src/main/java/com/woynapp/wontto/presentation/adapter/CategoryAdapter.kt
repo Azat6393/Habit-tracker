@@ -21,6 +21,17 @@ class CategoryAdapter(private val listener: CategoryItemListener) :
     private var selectedItemPosition: Int? = null
     private lateinit var mContext: Context
 
+    @SuppressLint("NotifyDataSetChanged")
+    fun setSelectedCategory(name: String){
+        currentList.forEachIndexed { index, category ->
+            if (category.name == name){
+                selectedItemPosition = index
+                notifyDataSetChanged()
+                return
+            }
+        }
+    }
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CategoryViewHolder {
         mContext = parent.context
         return CategoryViewHolder(
@@ -51,21 +62,33 @@ class CategoryAdapter(private val listener: CategoryItemListener) :
                     }
                 }
             }
-            _binding.btn.setOnClickListener {
-                val position = absoluteAdapterPosition
-                if (position != RecyclerView.NO_POSITION) {
-                    val item = getItem(position)
-                    if (item != null) {
-                        if (selectedItemPosition == position){
-                            selectedItemPosition = null
-                            listener.onClick(item)
-                            notifyDataSetChanged()
-                        }else {
-                            selectedItemPosition = position
-                            listener.onClick(item)
-                            notifyDataSetChanged()
+            _binding.btn.apply {
+                setOnClickListener {
+                    val position = absoluteAdapterPosition
+                    if (position != RecyclerView.NO_POSITION) {
+                        val item = getItem(position)
+                        if (item != null) {
+                            if (selectedItemPosition == position) {
+                                selectedItemPosition = null
+                                listener.onClick(item)
+                                notifyDataSetChanged()
+                            } else {
+                                selectedItemPosition = position
+                                listener.onClick(item)
+                                notifyDataSetChanged()
+                            }
                         }
                     }
+                }
+                setOnLongClickListener {
+                    val position = absoluteAdapterPosition
+                    if (position != RecyclerView.NO_POSITION) {
+                        val item = getItem(position)
+                        if (item != null) {
+                            listener.onLongClick(item)
+                        }
+                    }
+                    true
                 }
             }
         }
@@ -123,5 +146,6 @@ class CategoryAdapter(private val listener: CategoryItemListener) :
     interface CategoryItemListener {
         fun addCategory()
         fun onClick(item: Category)
+        fun onLongClick(item: Category)
     }
 }

@@ -13,22 +13,45 @@
         <action
             android:id="@+id/action_dashboardFragment_to_habitDetailsFragment"
             app:destination="@id/habitDetailsFragment" />
+        <action
+            android:id="@+id/action_dashboardFragment_to_webViewFragment"
+            app:destination="@id/webViewFragment" />
     </fragment>
     <fragment
         android:id="@+id/categoryFragment"
         android:name="com.woynapp.wontto.presentation.category.CategoryFragment"
         android:label="fragment_category"
-        tools:layout="@layout/fragment_category" />
+        tools:layout="@layout/fragment_category" >
+        <action
+            android:id="@+id/action_categoryFragment_to_habitDetailsFragment"
+            app:destination="@id/habitDetailsFragment" />
+        <action
+            android:id="@+id/action_categoryFragment_to_habitFragment"
+            app:destination="@id/habitFragment" />
+    </fragment>
     <fragment
         android:id="@+id/habitFragment"
         android:name="com.woynapp.wontto.presentation.add_habit.AddHabitFragment"
         android:label="fragment_add_habit"
-        tools:layout="@layout/fragment_add_habit" />
+        tools:layout="@layout/fragment_add_habit" >
+        <action
+            android:id="@+id/action_habitFragment_to_webViewFragment"
+            app:destination="@id/webViewFragment" />
+        <argument
+            android:name="habit"
+            app:argType="com.woynapp.wontto.domain.model.Habit"
+            app:nullable="true"
+            android:defaultValue="@null" />
+    </fragment>
     <fragment
         android:id="@+id/motivationFragment"
         android:name="com.woynapp.wontto.presentation.motivation.MotivationFragment"
         android:label="fragment_motivation"
-        tools:layout="@layout/fragment_motivation" />
+        tools:layout="@layout/fragment_motivation" >
+        <action
+            android:id="@+id/action_motivationFragment_to_webViewFragment"
+            app:destination="@id/webViewFragment" />
+    </fragment>
     <fragment
         android:id="@+id/profileFragment"
         android:name="com.woynapp.wontto.presentation.profile.ProfileFragment"

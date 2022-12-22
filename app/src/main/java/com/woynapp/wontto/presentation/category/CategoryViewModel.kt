@@ -57,4 +57,8 @@ class CategoryViewModel @Inject constructor(
             }
         }
     }
+
+    fun deleteCategory(category: Category) = viewModelScope.launch {
+        repo.deleteCategory(category)
+    }
 }

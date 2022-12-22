@@ -42,4 +42,13 @@
 
     </LinearLayout>
 
+    <ImageView
+        android:id="@+id/is_started_icon"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_gravity="end"
+        android:layout_margin="10dp"
+        android:visibility="gone"
+        android:src="@drawable/ic_baseline_check_circle_24"/>
+
 </androidx.cardview.widget.CardView>

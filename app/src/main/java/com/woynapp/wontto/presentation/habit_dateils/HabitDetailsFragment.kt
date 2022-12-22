@@ -50,7 +50,6 @@ class HabitDetailsFragment : Fragment(R.layout.fragment_habit_details) {
 
     private lateinit var powerMenu: PowerMenu
 
-
     private var currentHabit: HabitWithDays? = null
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -64,16 +63,58 @@ class HabitDetailsFragment : Fragment(R.layout.fragment_habit_details) {
             powerMenu.showAsDropDown(_binding.moreBtn)
         }
 
+        initAlertBtn()
         initRecyclerView()
         initPowerMenu()
         observe()
     }
 
+    private fun initAlertBtn() {
+        _binding.alertBtn.setOnClickListener {
+            AlertDetailsDialog(currentHabit?.habit!!,
+                alertOff = {
+                    currentHabit?.habit?.id?.let {
+                        RemindersManager.stopReminder(
+                            requireContext(),
+                            it
+                        )
+                    }
+                    viewModel.updateHabit(
+                        currentHabit!!.habit.copy(
+                            alert_on = false
+                        )
+                    )
+                },
+                alertOn = { time ->
+                    alertOn(time)
+                    viewModel.updateHabit(
+                        currentHabit!!.habit.copy(
+                            alert_on = true,
+                            alert_time = time
+                        )
+                    )
+                },
+                changeAlertTime = { time ->
+                    if (currentHabit?.habit?.alert_on == true) {
+                        currentHabit?.habit?.id?.let {
+                            RemindersManager.stopReminder(
+                                requireContext(),
+                                it
+                            ).also { alertOn(time) }
+                        }
+                    }
+                    viewModel.updateHabit(
+                        currentHabit!!.habit.copy(
+                            alert_time = time
+                        )
+                    )
+                }
+            ).show(childFragmentManager, "AlertDetailsDialog")
+        }
+    }
 
     private fun initPowerMenu() {
         powerMenu = PowerMenu.Builder(requireContext())
-            .addItem(PowerMenuItem(getString(R.string.alertOn), false))
-            .addItem(PowerMenuItem(getString(R.string.alertOff), false))
             .addItem(PowerMenuItem(getString(R.string.restart), false))
             .addItem(PowerMenuItem(getString(R.string.delete), false))
             .setAnimation(MenuAnimation.SHOWUP_TOP_RIGHT)
@@ -98,21 +139,6 @@ class HabitDetailsFragment : Fragment(R.layout.fragment_habit_details) {
         OnMenuItemClickListener<PowerMenuItem> { position, item ->
             when (position) {
                 0 -> {
-                    // alert on
-                    showTimePicker()
-                    powerMenu.dismiss()
-                }
-                1 -> {
-                    // alert off
-                    currentHabit?.habit?.id?.let {
-                        RemindersManager.stopReminder(
-                            requireContext(),
-                            it
-                        )
-                    }
-                    powerMenu.dismiss()
-                }
-                2 -> {
                     // restart
                     powerMenu.dismiss()
                     showAlertDialog(
@@ -123,7 +149,7 @@ class HabitDetailsFragment : Fragment(R.layout.fragment_habit_details) {
                         currentHabit?.let { viewModel.restartHabit(habit = it) }
                     }
                 }
-                3 -> {
+                1 -> {
                     // delete
                     powerMenu.dismiss()
                     showAlertDialog(
@@ -141,49 +167,37 @@ class HabitDetailsFragment : Fragment(R.layout.fragment_habit_details) {
             }
         }
 
-    private fun showTimePicker() {
-        val c = Calendar.getInstance()
-        val hour = c.get(Calendar.HOUR_OF_DAY)
-        val minute = c.get(Calendar.MINUTE)
-        val timePickerDialog = TimePickerDialog(
-            requireContext(),
-            { _, hourOfDay, minute ->
-                currentHabit!!.habit.id?.let {
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-                        val alarmManager = ContextCompat.getSystemService(
-                            requireContext(),
-                            AlarmManager::class.java
-                        )
-                        if (alarmManager?.canScheduleExactAlarms() == false) {
-                            Intent().also { intent ->
-                                intent.action = Settings.ACTION_REQUEST_SCHEDULE_EXACT_ALARM
-                                requireContext().startActivity(intent)
-                            }
-                        } else {
-                            createNotificationsChannels()
-                            RemindersManager.startReminder(
-                                requireContext(),
-                                reminderTime = "$hourOfDay:$minute",
-                                reminderId = currentHabit?.habit?.id!!,
-                                currentHabit!!.habit.name
-                            )
-                        }
-                    } else {
-                        createNotificationsChannels()
-                        RemindersManager.startReminder(
-                            requireContext(),
-                            reminderTime = "$hourOfDay:$minute",
-                            reminderId = it,
-                            currentHabit!!.habit.name
-                        )
+    private fun alertOn(time: String) {
+        currentHabit!!.habit.id?.let {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+                val alarmManager = ContextCompat.getSystemService(
+                    requireContext(),
+                    AlarmManager::class.java
+                )
+                if (alarmManager?.canScheduleExactAlarms() == false) {
+                    Intent().also { intent ->
+                        intent.action = Settings.ACTION_REQUEST_SCHEDULE_EXACT_ALARM
+                        requireContext().startActivity(intent)
                     }
+                } else {
+                    createNotificationsChannels()
+                    RemindersManager.startReminder(
+                        requireContext(),
+                        reminderTime = time,
+                        reminderId = currentHabit?.habit?.id!!,
+                        currentHabit!!.habit.name
+                    )
                 }
-            },
-            hour,
-            minute,
-            false
-        )
-        timePickerDialog.show()
+            } else {
+                createNotificationsChannels()
+                RemindersManager.startReminder(
+                    requireContext(),
+                    reminderTime = time,
+                    reminderId = it,
+                    currentHabit!!.habit.name
+                )
+            }
+        }
     }
 
     private fun createNotificationsChannels() {
@@ -267,6 +281,9 @@ class HabitDetailsFragment : Fragment(R.layout.fragment_habit_details) {
                         _binding.descriptionTv.text = it.habit.description
                         mAdapter.submitList(result.days)
                         currentHabit = it
+                        _binding.timeTv.text =
+                            if (result.habit.alert_on) getString(R.string.alertOn)
+                            else getString(R.string.alertOff)
                     }
                 }
             }

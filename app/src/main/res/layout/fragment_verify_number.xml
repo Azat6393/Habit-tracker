@@ -122,6 +122,7 @@
                 android:layout_height="60dp"
                 android:layout_weight="8"
                 android:background="?attr/primary_color"
+                android:theme="@style/EditTextTheme"
                 android:hint="@string/phone_number"
                 android:inputType="number"
                 android:maxLines="1"

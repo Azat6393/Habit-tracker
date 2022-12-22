@@ -68,4 +68,12 @@ class HabitRepositoryImpl @Inject constructor(
     override fun getAllHabitWithDays(): Flow<List<HabitWithDays>>{
         return dao.getAllHabitWithDays()
     }
+
+    override suspend fun deleteCategory(category: Category){
+        dao.deleteCategory(category)
+    }
+
+    override fun getHabitByUUID(uuid: String): Flow<Habit> {
+        return dao.getHabitByUUID(uuid)
+    }
 }

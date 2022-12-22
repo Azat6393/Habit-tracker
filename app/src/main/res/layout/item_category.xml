@@ -13,6 +13,7 @@
         android:src="@drawable/add_icon"
         android:layout_gravity="center"
         android:layout_marginStart="10dp"
+        android:layout_marginEnd="10dp"
         app:tint="@color/green"/>
 
     <com.google.android.material.button.MaterialButton
@@ -23,6 +24,6 @@
         app:strokeColor="?attr/primary_color"
         tools:text="Text"
         android:textColor="?attr/primary_color"
-        android:layout_marginStart="10dp"/>
+        android:layout_marginEnd="10dp"/>
 
 </LinearLayout>

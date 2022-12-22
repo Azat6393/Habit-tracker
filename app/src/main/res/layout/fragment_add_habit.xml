@@ -20,37 +20,25 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <Button
-        android:id="@+id/saveBtn"
-        style="@style/Widget.MaterialComponents.Button.TextButton"
-        android:layout_width="wrap_content"
-        android:layout_height="40dp"
-        android:text="@string/save"
-        android:layout_marginEnd="10dp"
-        android:textColor="@color/white"
-        app:layout_constraintBottom_toBottomOf="@+id/textView2"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
     <FrameLayout
         android:id="@+id/emoji_container"
         android:layout_width="50dp"
         android:layout_height="50dp"
         android:layout_margin="20dp"
         android:clickable="true"
+        android:focusable="true"
         app:layout_constraintBottom_toBottomOf="@+id/habitNameInputLayout"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/habitNameInputLayout"
-        android:focusable="true" >
+        app:layout_constraintTop_toTopOf="@+id/habitNameInputLayout">
 
         <TextView
             android:id="@+id/emoji_tv"
             android:layout_width="50dp"
             android:layout_height="50dp"
             android:autoSizeTextType="uniform"
-            tools:text="\ud83d\ude03"
             android:visibility="invisible"
-            tools:targetApi="o" />
+            tools:targetApi="o"
+            tools:text="\ud83d\ude03" />
 
         <ImageView
             android:id="@+id/emoji_ig"
@@ -98,11 +86,11 @@
         android:id="@+id/categoryTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/category"
-        android:textColor="?attr/secondary_color"
+        android:layout_marginStart="10dp"
         android:layout_marginTop="20dp"
         android:alpha="0.6"
-        android:layout_marginStart="10dp"
+        android:text="@string/category"
+        android:textColor="?attr/secondary_color"
         android:textSize="16sp"
         app:layout_constraintStart_toStartOf="@+id/habitDescriptionInputLayout"
         app:layout_constraintTop_toBottomOf="@+id/habitDescriptionInputLayout" />
@@ -110,8 +98,8 @@
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/categoryRv"
         android:layout_width="0dp"
-        android:layout_marginTop="10dp"
         android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/categoryTitle" />
@@ -120,8 +108,8 @@
         android:id="@+id/materialCardView"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="20dp"
         android:layout_marginTop="20dp"
+        android:layout_marginEnd="20dp"
         android:backgroundTint="?attr/surface_color"
         app:cardCornerRadius="30dp"
         app:layout_constraintEnd_toEndOf="parent"
@@ -140,7 +128,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="days"
+                android:text="@string/days"
                 android:textColor="?attr/secondary_color"
                 android:textSize="16sp" />
 
@@ -162,15 +150,15 @@
         android:id="@+id/daysSeekBar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
         android:layout_marginTop="20dp"
         android:layout_marginEnd="10dp"
-        android:layout_marginStart="10dp"
         android:max="120"
         android:min="21"
         android:progress="21"
-        android:thumbTint="?attr/primary_color"
-        android:progressTint="?attr/primary_color"
         android:progressBackgroundTint="?attr/primary_color"
+        android:progressTint="?attr/primary_color"
+        android:thumbTint="?attr/primary_color"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/materialCardView"
@@ -182,5 +170,84 @@
         android:layout_height="wrap_content"
         android:orientation="vertical"
         app:layout_constraintGuide_percent="0.6" />
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/save_ctn"
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        app:cardBackgroundColor="?attr/primary_color"
+        app:cardCornerRadius="100dp"
+        android:layout_marginBottom="30dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
+
+        <FrameLayout
+            android:id="@+id/saveBtn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="?attr/selectableItemBackground"
+            android:clickable="true"
+            android:focusable="true">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_margin="15dp"
+                android:text="@string/save"
+                android:textColor="@color/white"
+                android:textSize="18sp" />
+
+        </FrameLayout>
+
+    </androidx.cardview.widget.CardView>
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/alert_ctn"
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        app:cardBackgroundColor="?attr/primary_color"
+        app:cardCornerRadius="100dp"
+        android:layout_marginBottom="30dp"
+        app:layout_constraintBottom_toTopOf="@+id/save_ctn"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
+
+        <LinearLayout
+            android:id="@+id/alert_btn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:layout_marginBottom="5dp"
+            android:background="?attr/selectableItemBackground"
+            android:clickable="true"
+            android:focusable="true"
+            android:orientation="horizontal"
+            android:weightSum="10">
+
+            <ImageView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginStart="15dp"
+                android:layout_weight="2"
+                android:src="@drawable/notification" />
+
+            <TextView
+                android:id="@+id/time_tv"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_margin="10dp"
+                android:layout_weight="8"
+                android:text="@string/time"
+                android:textColor="@color/white"
+                android:textSize="18sp" />
+
+        </LinearLayout>
+
+
+    </androidx.cardview.widget.CardView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

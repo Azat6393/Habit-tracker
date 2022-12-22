@@ -5,11 +5,9 @@ import android.content.SharedPreferences
 import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 import com.woynapp.wontto.R
-import com.woynapp.wontto.core.utils.Constants
-import com.woynapp.wontto.core.utils.fromJsonToMotivation
-import com.woynapp.wontto.core.utils.getJsonFromAssets
-import com.woynapp.wontto.core.utils.toDays
+import com.woynapp.wontto.core.utils.*
 import com.woynapp.wontto.databinding.FragmentMotivationBinding
 import com.woynapp.wontto.domain.model.Motivation
 import dagger.hilt.android.AndroidEntryPoint
@@ -81,5 +79,15 @@ class MotivationFragment : Fragment(R.layout.fragment_motivation) {
             editor.putLong(Constants.PREFERENCE_LAST_MOTIVATION_DATE, System.currentTimeMillis())
             editor.apply()
         }
+        PopUpDialog(
+            onClose = {},
+            onClick = {
+                val action =
+                    MotivationFragmentDirections.actionMotivationFragmentToWebViewFragment(
+                        Constants.KARGO_BUL_URL
+                    )
+                findNavController().navigate(action)
+            }
+        ).show(childFragmentManager, "Ad Pop up")
     }
 }

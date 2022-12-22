@@ -98,5 +98,17 @@
     <string name="regular_sleep">Regular sleep</string>
     <string name="regular_sleep_description">Looking for ways to improve your sleep quality? Wanna wake up early and go to bed early? Here we suggest 21 strategies for you</string>
     <string name="start_challenge_message">Do you want to start this challenge?</string>
+    <string name="password_characters_error">Password should be minimum 6 characters</string>
+    <string name="delete_category">Delete category</string>
+    <string name="delete_category_message">Are you sure to delete category?</string>
+    <string name="days">days</string>
+    <string name="reminder">Reminder</string>
+    <string name="alert">Alert</string>
+    <string name="close">Close</string>
+    <string name="time">Time -</string>
+    <string name="select_time_message">Please select alert time</string>
+    <string name="on">On</string>
+    <string name="off">Off</string>
+    <string name="open">Open</string>
 
 </resources>
