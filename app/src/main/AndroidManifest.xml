@@ -38,7 +38,7 @@
             android:name=".presentation.MainActivity"
             android:exported="false"
             android:hardwareAccelerated="true"
-            android:windowSoftInputMode="stateVisible|adjustResize">
+            android:windowSoftInputMode="adjustPan">
 
             <meta-data
                 android:name="android.app.lib_name"

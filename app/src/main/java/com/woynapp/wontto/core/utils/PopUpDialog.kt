@@ -1,5 +1,6 @@
 package com.woynapp.wontto.core.utils
 
+import android.content.DialogInterface
 import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -19,6 +20,8 @@ class PopUpDialog(
 
     private lateinit var _binding: FragmentPopUpBinding
 
+    private var clickedCloseBtn = false
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -37,6 +40,7 @@ class PopUpDialog(
 
         _binding.close.setOnClickListener {
             onClose()
+            clickedCloseBtn = true
             this.dismiss()
         }
         _binding.root.setOnClickListener{
@@ -59,6 +63,11 @@ class PopUpDialog(
     override fun onDestroy() {
         _binding.videoview.stopPlayback()
         super.onDestroy()
+    }
+
+    override fun onDismiss(dialog: DialogInterface) {
+        super.onDismiss(dialog)
+        if (clickedCloseBtn) onClose()
     }
 
     override fun onStart() {

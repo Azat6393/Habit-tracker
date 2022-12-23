@@ -29,10 +29,10 @@
     <string name="yes">Да</string>
     <string name="no">Нет</string>
     <string name="habit_saved_successfully">Привычка успешно сохранена</string>
-    <string name="alertOn">Уведомление включено</string>
+    <string name="alertOn">Включено</string>
+    <string name="alertOff">Выключено</string>
     <string name="delete">Удалить</string>
     <string name="restart">Начать заново</string>
-    <string name="alertOff">Уведомление выключено</string>
     <string name="delete_habit">Удалить привычку</string>
     <string name="delete_habit_message">Вы действительно хотите удалить привычку?</string>
     <string name="restart_habit_message">Вы действительно хотите возобновить привычку</string>
@@ -102,4 +102,13 @@
     <string name="delete_category">Удалить категорию</string>
     <string name="delete_category_message">Вы действительно хотите удалить категорию?</string>
     <string name="days">дни</string>
+
+    <string name="reminder">Напоминание</string>
+    <string name="alert">Уведомление</string>
+    <string name="close">Закрыто</string>
+    <string name="open">Открыто</string>
+    <string name="time">Время -</string>
+    <string name="select_time_message">Выберите время оповещения</string>
+    <string name="on">Вкл</string>
+    <string name="off">Выкл</string>
 </resources>

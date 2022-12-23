@@ -29,10 +29,10 @@
     <string name="yes">Evet</string>
     <string name="no">Hayır</string>
     <string name="habit_saved_successfully">Alışkanlık başarıyla kaydedildi</string>
-    <string name="alertOn">Alarmı Aç</string>
+    <string name="alertOn">Alarm Açık</string>
+    <string name="alertOff">Alarm Kapalı</string>
     <string name="delete">Sil</string>
     <string name="restart">Yeniden Başlat</string>
-    <string name="alertOff">Alarmı Kapat</string>
     <string name="delete_habit">Alışkanlığı sil</string>
     <string name="delete_habit_message">Alışkanlığı silmek istediğinizden emin misiniz?</string>
     <string name="restart_habit_message">Alışkanlığı yeniden başlatmak istediğinizden emin misiniz</string>
@@ -102,5 +102,14 @@
     <string name="delete_category">Kategoriyi sil</string>
     <string name="delete_category_message">Kategoriyi silmek istediğinizden emin misiniz?</string>
     <string name="days">günler</string>
+
+    <string name="reminder">Hatırlatıcı</string>
+    <string name="alert">Alarm</string>
+    <string name="close">Kapalı</string>
+    <string name="open">Açık</string>
+    <string name="time">Zaman -</string>
+    <string name="select_time_message">Lütfen alarm saatini seçin</string>
+    <string name="on">Aç</string>
+    <string name="off">Kapat</string>
 
 </resources>

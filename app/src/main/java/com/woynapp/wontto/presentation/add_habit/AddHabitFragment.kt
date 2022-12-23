@@ -32,6 +32,7 @@ import com.woynapp.wontto.domain.model.Category
 import com.woynapp.wontto.domain.model.Habit
 import com.woynapp.wontto.presentation.adapter.CategoryAdapter
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import java.util.*
 
@@ -58,9 +59,9 @@ class AddHabitFragment : Fragment(R.layout.fragment_add_habit),
         _binding.saveBtn.setOnClickListener {
             if (checkForValidHabit()) {
                 val habit = getHabit()
-                if (args.habit == null){
+                if (args.habit == null) {
                     viewModel.addHabit(habit)
-                }else{
+                } else {
                     viewModel.updateHabit(habit)
                 }
                 clearViews()
@@ -137,11 +138,15 @@ class AddHabitFragment : Fragment(R.layout.fragment_add_habit),
     private fun showAd() {
         PopUpDialog(
             onClose = {
-                Snackbar.make(
-                    _binding.root,
-                    getString(R.string.habit_saved_successfully),
-                    Snackbar.LENGTH_SHORT
-                ).show()
+                if (args.habit == null) {
+                    Snackbar.make(
+                        _binding.root,
+                        getString(R.string.habit_saved_successfully),
+                        Snackbar.LENGTH_SHORT
+                    ).show()
+                } else {
+                    findNavController().popBackStack()
+                }
             },
             onClick = {
                 val action =
@@ -168,9 +173,9 @@ class AddHabitFragment : Fragment(R.layout.fragment_add_habit),
                 viewModel.categories.collect { result ->
                     val categoryList = arrayListOf<Category>(Category(name = ""))
                     categoryList.addAll(result)
-                    categoryAdapter.submitList(categoryList).also {
-                        initHabitIfExist()
-                    }
+                    categoryAdapter.submitList(categoryList)
+                    delay(100L)
+                    initHabitIfExist()
                 }
             }
         }
@@ -331,7 +336,7 @@ class AddHabitFragment : Fragment(R.layout.fragment_add_habit),
 
     override fun onStart() {
         super.onStart()
-        if (args.habit != null){
+        if (args.habit != null) {
             requireActivity()
                 .findViewById<BottomNavigationView>(R.id.bottom_navigation_view)
                 .visibility = View.GONE
@@ -340,7 +345,7 @@ class AddHabitFragment : Fragment(R.layout.fragment_add_habit),
 
     override fun onStop() {
         super.onStop()
-        if (args.habit != null){
+        if (args.habit != null) {
             requireActivity()
                 .findViewById<BottomNavigationView>(R.id.bottom_navigation_view)
                 .visibility = View.VISIBLE

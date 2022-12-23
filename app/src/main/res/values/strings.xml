@@ -29,9 +29,9 @@
     <string name="no">No</string>
     <string name="habit_saved_successfully">Habit saved successfully</string>
     <string name="alertOn">Alert On</string>
+    <string name="alertOff">Alert Off</string>
     <string name="delete">Delete</string>
     <string name="restart">Restart</string>
-    <string name="alertOff">Alert Off</string>
     <string name="delete_habit">Delete habit</string>
     <string name="delete_habit_message">Are you sure to delete the habit?</string>
     <string name="restart_habit_message">Are you sure to restart habit</string>
@@ -102,13 +102,14 @@
     <string name="delete_category">Delete category</string>
     <string name="delete_category_message">Are you sure to delete category?</string>
     <string name="days">days</string>
+
     <string name="reminder">Reminder</string>
     <string name="alert">Alert</string>
     <string name="close">Close</string>
+    <string name="open">Open</string>
     <string name="time">Time -</string>
     <string name="select_time_message">Please select alert time</string>
     <string name="on">On</string>
     <string name="off">Off</string>
-    <string name="open">Open</string>
 
 </resources>
