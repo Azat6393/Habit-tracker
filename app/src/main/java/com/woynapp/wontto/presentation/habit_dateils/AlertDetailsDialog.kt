@@ -8,9 +8,11 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
+import android.widget.Toast
 import androidx.fragment.app.DialogFragment
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.woynapp.wontto.R
+import com.woynapp.wontto.core.utils.showToastMessage
 import com.woynapp.wontto.databinding.DialogAlertBinding
 import com.woynapp.wontto.domain.model.Habit
 import java.util.*
@@ -59,11 +61,17 @@ class AlertDetailsDialog(
                     _binding.timeTv.text = "${getString(R.string.close)} - $selectedTime"
                     alertState = false
                 } else {
-                    alertOn(selectedTime!!)
-                    alertBtn.text = getString(R.string.off)
-                    alertBtn.setTextColor(Color.parseColor("#FF5151"))
-                    _binding.timeTv.text = "${getString(R.string.open)} - $selectedTime"
-                    alertState = true
+                    if (selectedTime.isNullOrBlank()) {
+                        requireContext().showToastMessage(
+                            getString(R.string.select_time_message)
+                        )
+                    } else {
+                        alertOn(selectedTime!!)
+                        alertBtn.text = getString(R.string.off)
+                        alertBtn.setTextColor(Color.parseColor("#FF5151"))
+                        _binding.timeTv.text = "${getString(R.string.open)} - $selectedTime"
+                        alertState = true
+                    }
                 }
             }
             timeCtn.setOnClickListener { showTimePicker() }

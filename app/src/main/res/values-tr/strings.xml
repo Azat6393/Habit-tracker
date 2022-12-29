@@ -107,9 +107,10 @@
     <string name="alert">Alarm</string>
     <string name="close">Kapalı</string>
     <string name="open">Açık</string>
-    <string name="time">Zaman -</string>
+    <string name="time">Alarm -</string>
     <string name="select_time_message">Lütfen alarm saatini seçin</string>
     <string name="on">Aç</string>
     <string name="off">Kapat</string>
+    <string name="add">Ekle</string>
 
 </resources>

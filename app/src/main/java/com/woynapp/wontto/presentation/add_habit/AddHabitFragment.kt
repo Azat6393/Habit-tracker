@@ -21,7 +21,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
-import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.GridLayoutManager
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.snackbar.Snackbar
 import com.woynapp.wontto.R
@@ -30,7 +30,7 @@ import com.woynapp.wontto.core.utils.*
 import com.woynapp.wontto.databinding.FragmentAddHabitBinding
 import com.woynapp.wontto.domain.model.Category
 import com.woynapp.wontto.domain.model.Habit
-import com.woynapp.wontto.presentation.adapter.CategoryAdapter
+import com.woynapp.wontto.presentation.adapter.CategoryAddHabitAdapter
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -38,10 +38,10 @@ import java.util.*
 
 @AndroidEntryPoint
 class AddHabitFragment : Fragment(R.layout.fragment_add_habit),
-    CategoryAdapter.CategoryItemListener {
+    CategoryAddHabitAdapter.CategoryItemListener {
 
     private lateinit var _binding: FragmentAddHabitBinding
-    private val categoryAdapter: CategoryAdapter by lazy { CategoryAdapter(this) }
+    private val categoryAdapter: CategoryAddHabitAdapter by lazy { CategoryAddHabitAdapter(this) }
     private val viewModel: AddHabitViewModel by viewModels()
     private val args: AddHabitFragmentArgs by navArgs()
 
@@ -49,11 +49,20 @@ class AddHabitFragment : Fragment(R.layout.fragment_add_habit),
     private var selectedEmoji: String? = null
 
     private var selectedTime: String? = null
+    private var isCategoryClicked = false
+    private var currentCategoryList: List<Category> = emptyList()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         _binding = FragmentAddHabitBinding.bind(view)
 
+        initView()
+        initRecyclerViews()
+        observe()
+    }
+
+    @SuppressLint("NotifyDataSetChanged")
+    private fun initView() {
         _binding.daysSeekBar.setOnSeekBarChangeListener(onSeekbarChangeListener)
 
         _binding.saveBtn.setOnClickListener {
@@ -86,8 +95,30 @@ class AddHabitFragment : Fragment(R.layout.fragment_add_habit),
         }
         _binding.alertBtn.setOnClickListener { showTimePicker() }
 
-        initRecyclerViews()
-        observe()
+        _binding.categoryCtn.setOnClickListener {
+            isCategoryClicked = !isCategoryClicked
+            if (isCategoryClicked) {
+                _binding.categoryIcon.setImageDrawable(
+                    ContextCompat.getDrawable(
+                        requireContext(),
+                        R.drawable.ic_baseline_keyboard_arrow_down_24
+                    )
+                )
+                categoryAdapter.submitList(currentCategoryList)
+            } else {
+                _binding.categoryIcon.setImageDrawable(
+                    ContextCompat.getDrawable(
+                        requireContext(),
+                        R.drawable.ic_baseline_chevron_right_24
+                    )
+                )
+                categoryAdapter.submitList(
+                    if (currentCategoryList.size >= 6)
+                        currentCategoryList.take(6)
+                    else currentCategoryList
+                )
+            }
+        }
     }
 
     private fun initHabitIfExist() {
@@ -119,8 +150,8 @@ class AddHabitFragment : Fragment(R.layout.fragment_add_habit),
                 day_size = daySize,
                 uuid = uuid,
                 emoji = selectedEmoji!!,
-                alert_on = true,
-                alert_time = selectedTime!!
+                alert_on = !selectedTime.isNullOrBlank(),
+                alert_time = if (selectedTime.isNullOrBlank()) "" else selectedTime
             )
         }
         return args.habit!!.copy(
@@ -130,8 +161,8 @@ class AddHabitFragment : Fragment(R.layout.fragment_add_habit),
             category = selectedCategory!!,
             day_size = daySize,
             emoji = selectedEmoji!!,
-            alert_time = selectedTime,
-            alert_on = true
+            alert_time = if (selectedTime.isNullOrBlank()) "" else selectedTime,
+            alert_on = !selectedTime.isNullOrBlank()
         )
     }
 
@@ -172,8 +203,29 @@ class AddHabitFragment : Fragment(R.layout.fragment_add_habit),
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.categories.collect { result ->
                     val categoryList = arrayListOf<Category>(Category(name = ""))
-                    categoryList.addAll(result)
-                    categoryAdapter.submitList(categoryList)
+                    categoryList.addAll(result.reversed())
+                    currentCategoryList = categoryList
+                    if (args.habit != null){
+                        isCategoryClicked = true
+                        _binding.categoryIcon.setImageDrawable(
+                            ContextCompat.getDrawable(
+                                requireContext(),
+                                R.drawable.ic_baseline_keyboard_arrow_down_24
+                            )
+                        )
+                        categoryAdapter.submitList(categoryList)
+                    }else {
+                        categoryAdapter.submitList(
+                            if (isCategoryClicked) {
+                                categoryList
+                            } else {
+                                if (categoryList.size >= 6)
+                                    categoryList.take(6)
+                                else
+                                    categoryList
+                            }
+                        )
+                    }
                     delay(100L)
                     initHabitIfExist()
                 }
@@ -195,8 +247,8 @@ class AddHabitFragment : Fragment(R.layout.fragment_add_habit),
         _binding.categoryRv.apply {
             adapter = categoryAdapter
             layoutManager =
-                LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
-            setHasFixedSize(true)
+                GridLayoutManager(requireContext(), 3, GridLayoutManager.VERTICAL, false)
+            setHasFixedSize(false)
         }
     }
 
@@ -249,12 +301,6 @@ class AddHabitFragment : Fragment(R.layout.fragment_add_habit),
                     getString(R.string.select_emoji_message),
                     Toast.LENGTH_SHORT
                 ).show()
-                return false
-            }
-            selectedTime.isNullOrBlank() -> {
-                requireContext().showToastMessage(
-                    getString(R.string.select_time_message)
-                )
                 return false
             }
         }

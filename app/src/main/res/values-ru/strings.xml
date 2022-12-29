@@ -107,8 +107,10 @@
     <string name="alert">Уведомление</string>
     <string name="close">Закрыто</string>
     <string name="open">Открыто</string>
-    <string name="time">Время -</string>
+    <string name="time">Alarm -</string>
     <string name="select_time_message">Выберите время оповещения</string>
     <string name="on">Вкл</string>
     <string name="off">Выкл</string>
+    <string name="add">Добавить</string>
+
 </resources>

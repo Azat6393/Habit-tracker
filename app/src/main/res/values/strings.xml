@@ -107,9 +107,10 @@
     <string name="alert">Alert</string>
     <string name="close">Close</string>
     <string name="open">Open</string>
-    <string name="time">Time -</string>
+    <string name="time">Alert -</string>
     <string name="select_time_message">Please select alert time</string>
     <string name="on">On</string>
     <string name="off">Off</string>
+    <string name="add">Add</string>
 
 </resources>

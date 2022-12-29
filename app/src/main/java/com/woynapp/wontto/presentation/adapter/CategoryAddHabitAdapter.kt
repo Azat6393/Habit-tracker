@@ -12,11 +12,12 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.woynapp.wontto.R
+import com.woynapp.wontto.databinding.ItemCategoryAddHabitBinding
 import com.woynapp.wontto.databinding.ItemCategoryBinding
 import com.woynapp.wontto.domain.model.Category
 
-class CategoryAdapter(private val listener: CategoryItemListener) :
-    ListAdapter<Category, CategoryAdapter.CategoryViewHolder>(DiffCallBack) {
+class CategoryAddHabitAdapter(private val listener: CategoryItemListener) :
+    ListAdapter<Category, CategoryAddHabitAdapter.CategoryViewHolder>(DiffCallBack) {
 
     private var selectedItemId: Int? = null
     private lateinit var mContext: Context
@@ -24,6 +25,7 @@ class CategoryAdapter(private val listener: CategoryItemListener) :
     @SuppressLint("NotifyDataSetChanged")
     fun setSelectedCategory(name: String){
         currentList.forEachIndexed { index, category ->
+            println("$name -> ${category.name}")
             if (category.name == name){
                 selectedItemId = category.id
                 notifyDataSetChanged()
@@ -35,7 +37,7 @@ class CategoryAdapter(private val listener: CategoryItemListener) :
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CategoryViewHolder {
         mContext = parent.context
         return CategoryViewHolder(
-            ItemCategoryBinding.inflate(
+            ItemCategoryAddHabitBinding.inflate(
                 LayoutInflater.from(parent.context), parent, false
             )
         )
@@ -49,7 +51,7 @@ class CategoryAdapter(private val listener: CategoryItemListener) :
     }
 
     @SuppressLint("NotifyDataSetChanged")
-    inner class CategoryViewHolder(private val _binding: ItemCategoryBinding) :
+    inner class CategoryViewHolder(private val _binding: ItemCategoryAddHabitBinding) :
         RecyclerView.ViewHolder(_binding.root) {
 
         init {

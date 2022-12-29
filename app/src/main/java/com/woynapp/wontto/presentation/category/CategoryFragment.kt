@@ -48,7 +48,7 @@ class CategoryFragment : Fragment(R.layout.fragment_category), AdapterItemListen
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.categories.collect { result ->
                     val categoryList = arrayListOf<Category>(Category(name = ""))
-                    categoryList.addAll(result)
+                    categoryList.addAll(result.reversed())
                     categoryAdapter.submitList(categoryList)
                 }
             }
