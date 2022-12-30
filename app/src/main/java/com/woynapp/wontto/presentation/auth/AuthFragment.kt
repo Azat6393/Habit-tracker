@@ -187,6 +187,33 @@ class AuthFragment : Fragment(R.layout.fragment_auth) {
                 }
             }.addOnFailureListener { e ->
                 Log.d("Google Sign in", e.localizedMessage ?: "Error")
+                signUpWithGoogle()
+            }
+    }
+
+    private fun signUpWithGoogle(){
+        oneTapClient = Identity.getSignInClient(requireActivity())
+        singInRequest = BeginSignInRequest.builder()
+            .setGoogleIdTokenRequestOptions(
+                BeginSignInRequest.GoogleIdTokenRequestOptions.builder()
+                    .setSupported(true)
+                    .setServerClientId("318115625526-9hfk3hi0gnv84vabammnpc0doausqovk.apps.googleusercontent.com")
+                    .setFilterByAuthorizedAccounts(false)
+                    .build()
+            )
+            .build()
+        oneTapClient.beginSignIn(singInRequest)
+            .addOnSuccessListener { result ->
+                try {
+                    startIntentSenderForResult(
+                        result.pendingIntent.intentSender, REQ_ONE_TAP,
+                        null, 0, 0, 0, null
+                    )
+                } catch (e: Exception) {
+                    Log.d("SignIn", "Couldn't start One Tap UI: ${e.message}")
+                }
+            }.addOnFailureListener { e ->
+                Log.d("SignIn", "Signing Up...")
                 requireContext().showToastMessage("Google Sign in Error is ${e.localizedMessage}")
             }
     }
@@ -203,7 +230,7 @@ class AuthFragment : Fragment(R.layout.fragment_auth) {
                 BeginSignInRequest.GoogleIdTokenRequestOptions.builder()
                     .setSupported(true)
                     .setServerClientId("318115625526-9hfk3hi0gnv84vabammnpc0doausqovk.apps.googleusercontent.com")
-                    .setFilterByAuthorizedAccounts(false)
+                    .setFilterByAuthorizedAccounts(true)
                     .build()
             )
             .setAutoSelectEnabled(true)

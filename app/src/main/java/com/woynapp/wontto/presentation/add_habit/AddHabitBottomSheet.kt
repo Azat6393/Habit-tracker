@@ -26,7 +26,7 @@ class AddHabitBottomSheet(private val addHabit: (String) -> Unit): BottomSheetDi
 
         _binding.saveButton.setOnClickListener {
             val text = _binding.categoryNameInputLayout.editText?.text.toString()
-            if (text.isNotBlank()){
+            if (text.isNotBlank() && text.length <= 12){
                 addHabit(text)
                 dismiss()
             }

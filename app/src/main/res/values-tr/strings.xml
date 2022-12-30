@@ -51,7 +51,7 @@
     <string name="name">Ad</string>
     <string name="last_name">Soyadı</string>
     <string name="enter_your_name">Tam adınızı ve e-posta adresinizi giriniz</string>
-    <string name="verify_your_phone_number">Telefon numaranız nedir?</string>
+    <string name="verify_your_phone_number">Telefon numaranızı giriniz</string>
     <string name="phone_number">Telefon numarası</string>
     <string name="continue_text">Devam</string>
     <string name="input_phone_number">Lütfen telefon numarasını giriniz</string>
