@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.SharedPreferences
 import android.os.Bundle
 import android.view.View
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.woynapp.wontto.R
@@ -25,9 +26,15 @@ class MotivationFragment : Fragment(R.layout.fragment_motivation) {
 
         mSharedPreferences =
             requireActivity().getSharedPreferences(
-                Constants.PREFERENCE_DARK_MODE,
+                Constants.PREFERENCE_DATABASE_NAME,
                 Context.MODE_PRIVATE
             )
+
+        val isDarkMode = mSharedPreferences?.getBoolean(Constants.PREFERENCE_DARK_MODE, false)
+        isDarkMode?.let {
+            _binding.backgroundImg.isVisible = !isDarkMode
+        }
+
         initMotivation()
     }
 

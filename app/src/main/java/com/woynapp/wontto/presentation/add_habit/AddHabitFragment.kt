@@ -6,6 +6,7 @@ import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.TimePickerDialog
 import android.content.Intent
+import android.graphics.Color
 import android.os.Build
 import android.os.Bundle
 import android.provider.Settings
@@ -175,6 +176,7 @@ class AddHabitFragment : Fragment(R.layout.fragment_add_habit),
                         getString(R.string.habit_saved_successfully),
                         Snackbar.LENGTH_SHORT
                     ).show()
+                    findNavController().popBackStack()
                 } else {
                     findNavController().popBackStack()
                 }

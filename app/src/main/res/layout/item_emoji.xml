@@ -9,6 +9,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textSize="30sp"
+        android:textColor="#000000"
         android:gravity="center"
         android:layout_margin="10dp"
         tools:text="\ud83d\ude03"/>

@@ -31,7 +31,7 @@ class CategoryFragment : Fragment(R.layout.fragment_category), AdapterItemListen
     private lateinit var _binding: FragmentCategoryBinding
     private val viewModel: CategoryViewModel by viewModels()
     private val habitAdapter: HabitsAdapter by lazy { HabitsAdapter(this) }
-    private val categoryAdapter: CategoryAdapter by lazy { CategoryAdapter(this) }
+    //private val categoryAdapter: CategoryAdapter by lazy { CategoryAdapter(this) }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -44,7 +44,7 @@ class CategoryFragment : Fragment(R.layout.fragment_category), AdapterItemListen
     }
 
     private fun observe() {
-        lifecycleScope.launch {
+        /*lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.categories.collect { result ->
                     val categoryList = arrayListOf<Category>(Category(name = ""))
@@ -52,7 +52,7 @@ class CategoryFragment : Fragment(R.layout.fragment_category), AdapterItemListen
                     categoryAdapter.submitList(categoryList)
                 }
             }
-        }
+        }*/
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.habits.collect { result ->
@@ -63,12 +63,12 @@ class CategoryFragment : Fragment(R.layout.fragment_category), AdapterItemListen
     }
 
     private fun initRecyclerViews() {
-        _binding.categoryRv.apply {
+        /*_binding.categoryRv.apply {
             adapter = categoryAdapter
             layoutManager =
                 LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
             setHasFixedSize(true)
-        }
+        }*/
         _binding.habitsRv.apply {
             adapter = habitAdapter
             layoutManager =

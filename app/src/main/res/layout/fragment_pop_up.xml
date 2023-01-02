@@ -16,7 +16,7 @@
         android:layout_margin="20dp"
         android:layout_width="40dp"
         android:layout_height="40dp"
-        app:tint="?attr/secondary_color"
+        app:tint="@color/black"
         android:src="@drawable/ic_baseline_close_24"/>
 
 </FrameLayout>

@@ -59,6 +59,7 @@
                 android:layout_height="50dp"
                 android:autoSizeTextType="uniform"
                 android:visibility="invisible"
+                android:textColor="#000000"
                 tools:targetApi="o"
                 tools:text="\ud83d\ude03" />
 
