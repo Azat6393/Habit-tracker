@@ -176,7 +176,9 @@ class AddHabitFragment : Fragment(R.layout.fragment_add_habit),
                         getString(R.string.habit_saved_successfully),
                         Snackbar.LENGTH_SHORT
                     ).show()
-                    findNavController().popBackStack()
+                    requireActivity()
+                        .findViewById<BottomNavigationView>(R.id.bottom_navigation_view)
+                        .selectedItemId = R.id.dashboardFragment
                 } else {
                     findNavController().popBackStack()
                 }
