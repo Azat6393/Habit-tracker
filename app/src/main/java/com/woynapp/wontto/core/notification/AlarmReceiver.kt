@@ -9,6 +9,7 @@ import android.os.Build
 import androidx.core.app.NotificationCompat
 import androidx.core.content.ContextCompat
 import com.woynapp.wontto.R
+import com.woynapp.wontto.domain.model.AlarmItem
 import com.woynapp.wontto.presentation.MainActivity
 
 class AlarmReceiver : BroadcastReceiver() {
@@ -27,8 +28,19 @@ class AlarmReceiver : BroadcastReceiver() {
             message
         )
         val id = intent.getIntExtra("reminder_id", 0)
-        val time = intent.getStringExtra("reminder_time")
-        time?.let { RemindersManager.startReminder(context.applicationContext, it, id, message) }
+        val time = intent.getLongExtra("reminder_time", 0)
+        val isMute = intent.getBooleanExtra("reminder_is_mute", false)
+        val habitId = intent.getStringExtra("reminder_habit_id") ?: ""
+        RemindersManager.startReminder(
+            context = context.applicationContext,
+            item = AlarmItem(
+                uuid = id,
+                message = message,
+                time = time,
+                is_mute = isMute,
+                habit_id = habitId
+            )
+        )
     }
 }
 

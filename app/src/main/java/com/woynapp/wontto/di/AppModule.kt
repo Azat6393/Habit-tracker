@@ -35,7 +35,8 @@ object AppModule {
         context,
         HabitDatabase::class.java,
         "habit_database",
-    ).build()
+    ).addMigrations(HabitDatabase.migration1To2)
+        .build()
 
     @Provides
     @Singleton
@@ -45,7 +46,7 @@ object AppModule {
 
     @Provides
     @Singleton
-    fun provideHabitRepository(dao: HabitDao): HabitRepository{
+    fun provideHabitRepository(dao: HabitDao): HabitRepository {
         return HabitRepositoryImpl(dao)
     }
 

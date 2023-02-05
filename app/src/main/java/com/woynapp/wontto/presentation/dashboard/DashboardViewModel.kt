@@ -4,6 +4,7 @@ import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.woynapp.wontto.core.utils.toHabitWithDays
 import com.woynapp.wontto.data.local.datastore.DatastorePreferencesKey
 import com.woynapp.wontto.domain.model.DayInfo
 import com.woynapp.wontto.domain.model.HabitWithDays
@@ -40,8 +41,8 @@ class DashboardViewModel @Inject constructor(
     }
 
     private fun getStartedHabits() = viewModelScope.launch {
-        repo.getAllHabitWithDays().onEach {
-            _habits.value = it
+        repo.getAllHabitWithDays().onEach { result ->
+            _habits.value = result.map { it.toHabitWithDays() }
         }.launchIn(viewModelScope)
     }
 

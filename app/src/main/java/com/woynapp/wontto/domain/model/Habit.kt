@@ -17,9 +17,7 @@ data class Habit(
     val category: String,
     val day_size: Int,
     val uuid: String,
-    val emoji: String,
-    val alert_on: Boolean = false,
-    val alert_time: String? = null
+    val emoji: String
 ): Parcelable
 
 

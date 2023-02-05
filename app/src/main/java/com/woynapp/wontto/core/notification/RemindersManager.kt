@@ -6,6 +6,8 @@ import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
 import android.os.Build
+import com.woynapp.wontto.domain.model.AlarmItem
+import com.woynapp.wontto.domain.model.Category
 import java.util.*
 
 object RemindersManager {
@@ -13,41 +15,39 @@ object RemindersManager {
     @SuppressLint("UnspecifiedImmutableFlag")
     fun startReminder(
         context: Context,
-        reminderTime: String,
-        reminderId: Int,
-        message: String
+        item: AlarmItem
     ) {
         val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
 
-        val (hours, min) = reminderTime.split(":").map { it.toInt() }
         val intent =
             Intent(context.applicationContext, AlarmReceiver::class.java).let { intent ->
-                intent.putExtra("reminder_id", reminderId)
-                intent.putExtra("reminder_time", reminderTime)
-                intent.putExtra("message",message)
+                intent.putExtra("reminder_id", item.uuid)
+                intent.putExtra("reminder_time", item.time)
+                intent.putExtra("message", item.message)
+                intent.putExtra("reminder_is_mute", item.is_mute)
+                intent.putExtra("reminder_habit_id", item.habit_id)
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
                     PendingIntent.getBroadcast(
                         context.applicationContext,
-                        reminderId,
+                        item.uuid,
                         intent,
-                        PendingIntent.FLAG_MUTABLE
+                        PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_MUTABLE
                     )
                 } else {
                     PendingIntent.getBroadcast(
                         context.applicationContext,
-                        reminderId,
+                        item.uuid,
                         intent,
                         PendingIntent.FLAG_UPDATE_CURRENT
                     )
                 }
             }
 
-        val calendar: Calendar = Calendar.getInstance(Locale.ENGLISH).apply {
-            set(Calendar.HOUR_OF_DAY, hours)
-            set(Calendar.MINUTE, min)
+        val calendar: Calendar = Calendar.getInstance().apply {
+            timeInMillis = item.time
         }
 
-        if (Calendar.getInstance(Locale.ENGLISH)
+        if (Calendar.getInstance(Locale.getDefault())
                 .apply { add(Calendar.MINUTE, 1) }.timeInMillis - calendar.timeInMillis > 0
         ) {
             calendar.add(Calendar.DATE, 1)
@@ -62,13 +62,13 @@ object RemindersManager {
     @SuppressLint("UnspecifiedImmutableFlag")
     fun stopReminder(
         context: Context,
-        reminderId: Int
+        item: AlarmItem
     ) {
         val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
         val intent = Intent(context, AlarmReceiver::class.java).let { intent ->
             PendingIntent.getBroadcast(
                 context,
-                reminderId,
+                item.uuid,
                 intent,
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) PendingIntent.FLAG_MUTABLE
                 else PendingIntent.FLAG_UPDATE_CURRENT

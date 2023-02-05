@@ -41,18 +41,18 @@ class AlertDetailsDialog(
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         _binding = DialogAlertBinding.bind(view)
-        alertState = habit.alert_on
+        //alertState = habit.alert_on
         _binding.apply {
-            selectedTime = habit.alert_time
+            //selectedTime = habit.alert_time
             setTimeText()
             closeBtn.setOnClickListener { this@AlertDetailsDialog.dismiss() }
-            alertBtn.text =
+           /* alertBtn.text =
                 if (habit.alert_on) getString(R.string.off)
                 else getString(R.string.on)
             alertBtn.setTextColor(
                 if (habit.alert_on) Color.parseColor("#FF5151")
                 else Color.parseColor("#08D500")
-            )
+            )*/
             alertBtn.setOnClickListener {
                 if (alertState) {
                     alertOff()
@@ -97,9 +97,9 @@ class AlertDetailsDialog(
     }
 
     private fun setTimeText() {
-        _binding.timeTv.text =
+        /*_binding.timeTv.text =
             if (habit.alert_on) "${getString(R.string.open)} - $selectedTime"
-            else "${getString(R.string.close)} - $selectedTime"
+            else "${getString(R.string.close)} - $selectedTime"*/
     }
 
     override fun onStart() {

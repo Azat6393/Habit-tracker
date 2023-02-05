@@ -2,6 +2,7 @@ package com.woynapp.wontto.presentation.habit_dateils
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.woynapp.wontto.core.utils.toHabitWithDays
 import com.woynapp.wontto.domain.model.DayInfo
 import com.woynapp.wontto.domain.model.Habit
 import com.woynapp.wontto.domain.model.HabitWithDays
@@ -23,8 +24,8 @@ class HabitDetailViewModel @Inject constructor(
     val habit = _habit.asStateFlow()
 
     fun getHabitById(id: Int) {
-        repo.getHabitWithDays(id).onEach {
-            _habit.value = it
+        repo.getHabitWithDays(id).onEach { result ->
+            _habit.value = result.toHabitWithDays()
         }.launchIn(viewModelScope)
     }
 

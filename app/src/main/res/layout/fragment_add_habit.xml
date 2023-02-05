@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -17,7 +17,7 @@
             android:background="?attr/primary_color"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" >
+            app:layout_constraintTop_toTopOf="parent">
 
 
             <TextView
@@ -29,7 +29,7 @@
                 android:text="@string/add_habit"
                 android:textColor="@color/white"
                 android:textSize="25sp"
-                android:textStyle="bold"/>
+                android:textStyle="bold" />
 
             <ImageView
                 android:layout_width="45dp"
@@ -37,7 +37,7 @@
                 android:layout_gravity="end|center"
                 android:layout_marginEnd="15dp"
                 android:scaleType="centerCrop"
-                android:src="@drawable/logo_wontto_white"/>
+                android:src="@drawable/logo_wontto_white" />
 
         </FrameLayout>
 
@@ -58,8 +58,8 @@
                 android:layout_width="50dp"
                 android:layout_height="50dp"
                 android:autoSizeTextType="uniform"
-                android:visibility="invisible"
                 android:textColor="#000000"
+                android:visibility="invisible"
                 tools:targetApi="o"
                 tools:text="\ud83d\ude03" />
 
@@ -109,14 +109,14 @@
             android:id="@+id/category_ctn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
             android:layout_marginTop="20dp"
             android:background="?attr/selectableItemBackground"
             android:clickable="true"
             android:focusable="true"
             android:gravity="center"
+            android:orientation="horizontal"
             app:layout_constraintStart_toStartOf="@+id/habitDescriptionInputLayout"
-            app:layout_constraintTop_toBottomOf="@+id/habitDescriptionInputLayout" >
+            app:layout_constraintTop_toBottomOf="@+id/habitDescriptionInputLayout">
 
             <TextView
                 android:id="@+id/categoryTitle"
@@ -126,13 +126,13 @@
                 android:alpha="0.6"
                 android:text="@string/category"
                 android:textColor="?attr/secondary_color"
-                android:textSize="16sp"/>
+                android:textSize="16sp" />
 
             <ImageView
                 android:id="@+id/categoryIcon"
                 android:layout_width="25dp"
                 android:layout_height="25dp"
-                android:src="@drawable/ic_baseline_chevron_right_24"/>
+                android:src="@drawable/ic_baseline_chevron_right_24" />
 
         </LinearLayout>
 
@@ -218,6 +218,7 @@
             app:layout_constraintGuide_percent="0.6" />
 
         <LinearLayout
+            android:id="@+id/linearLayout5"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center"
@@ -232,10 +233,10 @@
                 android:layout_width="150dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="30dp"
-                android:layout_marginEnd="15dp"
-                android:minWidth="200dp"
                 android:layout_marginTop="30dp"
+                android:layout_marginEnd="15dp"
                 android:layout_marginBottom="20dp"
+                android:minWidth="200dp"
                 app:cardBackgroundColor="?attr/primary_color"
                 app:cardCornerRadius="100dp">
 
@@ -280,8 +281,8 @@
                 android:layout_width="150dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="15dp"
-                android:layout_marginEnd="30dp"
                 android:layout_marginTop="30dp"
+                android:layout_marginEnd="30dp"
                 android:layout_marginBottom="20dp"
                 app:cardBackgroundColor="?attr/primary_color"
                 app:cardCornerRadius="100dp">
@@ -310,7 +311,16 @@
 
         </LinearLayout>
 
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/alarm_recycler_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/linearLayout5" />
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 
-</ScrollView>
+</androidx.core.widget.NestedScrollView>

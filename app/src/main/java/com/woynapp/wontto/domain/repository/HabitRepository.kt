@@ -1,5 +1,6 @@
 package com.woynapp.wontto.domain.repository
 
+import com.woynapp.wontto.data.local.dto.HabitWithDaysDto
 import com.woynapp.wontto.domain.model.Category
 import com.woynapp.wontto.domain.model.DayInfo
 import com.woynapp.wontto.domain.model.Habit
@@ -19,8 +20,8 @@ interface HabitRepository {
     suspend fun insertDayInfo(dayInfo: DayInfo)
     suspend fun updateDayInfo(dayInfo: DayInfo)
     suspend fun deleteAllDaysInfo(uuid: String)
-    fun getHabitWithDays(id: Int): Flow<HabitWithDays>
-    fun getAllHabitWithDays(): Flow<List<HabitWithDays>>
+    fun getHabitWithDays(id: Int): Flow<HabitWithDaysDto>
+    fun getAllHabitWithDays(): Flow<List<HabitWithDaysDto>>
     suspend fun deleteCategory(category: Category)
     fun getHabitByUUID(uuid: String): Flow<Habit>
 }

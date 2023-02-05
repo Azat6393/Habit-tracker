@@ -23,23 +23,27 @@ import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.snackbar.Snackbar
 import com.woynapp.wontto.R
 import com.woynapp.wontto.core.notification.RemindersManager
 import com.woynapp.wontto.core.utils.*
 import com.woynapp.wontto.databinding.FragmentAddHabitBinding
+import com.woynapp.wontto.domain.model.AlarmItem
 import com.woynapp.wontto.domain.model.Category
 import com.woynapp.wontto.domain.model.Habit
+import com.woynapp.wontto.presentation.adapter.AlarmAdapter
 import com.woynapp.wontto.presentation.adapter.CategoryAddHabitAdapter
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import java.util.*
+import kotlin.collections.ArrayList
 
 @AndroidEntryPoint
 class AddHabitFragment : Fragment(R.layout.fragment_add_habit),
-    CategoryAddHabitAdapter.CategoryItemListener {
+    CategoryAddHabitAdapter.CategoryItemListener, AlarmAdapter.OnItemClickListener {
 
     private lateinit var _binding: FragmentAddHabitBinding
     private val categoryAdapter: CategoryAddHabitAdapter by lazy { CategoryAddHabitAdapter(this) }
@@ -53,9 +57,19 @@ class AddHabitFragment : Fragment(R.layout.fragment_add_habit),
     private var isCategoryClicked = false
     private var currentCategoryList: List<Category> = emptyList()
 
+    private var habitId: String? = null
+
+    private val alarmAdapter: AlarmAdapter by lazy {
+        AlarmAdapter(this)
+    }
+
+    private val alarmList: ArrayList<AlarmItem> = arrayListOf()
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         _binding = FragmentAddHabitBinding.bind(view)
+
+        habitId = UUID.randomUUID().toString()
 
         initView()
         initRecyclerViews()
@@ -65,7 +79,6 @@ class AddHabitFragment : Fragment(R.layout.fragment_add_habit),
     @SuppressLint("NotifyDataSetChanged")
     private fun initView() {
         _binding.daysSeekBar.setOnSeekBarChangeListener(onSeekbarChangeListener)
-
         _binding.saveBtn.setOnClickListener {
             if (checkForValidHabit()) {
                 val habit = getHabit()
@@ -94,7 +107,11 @@ class AddHabitFragment : Fragment(R.layout.fragment_add_habit),
                 }.show(childFragmentManager, "Emoji bottom sheet")
             }
         }
-        _binding.alertBtn.setOnClickListener { showTimePicker() }
+        _binding.alertBtn.setOnClickListener {
+            if (checkForValidHabit()) {
+                showTimePicker()
+            }
+        }
 
         _binding.categoryCtn.setOnClickListener {
             isCategoryClicked = !isCategoryClicked
@@ -140,7 +157,6 @@ class AddHabitFragment : Fragment(R.layout.fragment_add_habit),
         val name = _binding.habitNameInputLayout.editText?.text.toString()
         val description = _binding.habitDescriptionInputLayout.editText?.text.toString()
         val daySize = _binding.daysSeekBar.progress
-        val uuid = UUID.randomUUID().toString()
         if (args.habit == null) {
             return Habit(
                 name = name,
@@ -149,10 +165,8 @@ class AddHabitFragment : Fragment(R.layout.fragment_add_habit),
                 started_date = System.currentTimeMillis(),
                 category = selectedCategory!!,
                 day_size = daySize,
-                uuid = uuid,
-                emoji = selectedEmoji!!,
-                alert_on = !selectedTime.isNullOrBlank(),
-                alert_time = if (selectedTime.isNullOrBlank()) "" else selectedTime
+                uuid = habitId!!,
+                emoji = selectedEmoji!!
             )
         }
         return args.habit!!.copy(
@@ -161,9 +175,7 @@ class AddHabitFragment : Fragment(R.layout.fragment_add_habit),
             started_date = System.currentTimeMillis(),
             category = selectedCategory!!,
             day_size = daySize,
-            emoji = selectedEmoji!!,
-            alert_time = if (selectedTime.isNullOrBlank()) "" else selectedTime,
-            alert_on = !selectedTime.isNullOrBlank()
+            emoji = selectedEmoji!!
         )
     }
 
@@ -209,7 +221,7 @@ class AddHabitFragment : Fragment(R.layout.fragment_add_habit),
                     val categoryList = arrayListOf<Category>(Category(name = ""))
                     categoryList.addAll(result.reversed())
                     currentCategoryList = categoryList
-                    if (args.habit != null){
+                    if (args.habit != null) {
                         isCategoryClicked = true
                         _binding.categoryIcon.setImageDrawable(
                             ContextCompat.getDrawable(
@@ -218,7 +230,7 @@ class AddHabitFragment : Fragment(R.layout.fragment_add_habit),
                             )
                         )
                         categoryAdapter.submitList(categoryList)
-                    }else {
+                    } else {
                         categoryAdapter.submitList(
                             if (isCategoryClicked) {
                                 categoryList
@@ -253,6 +265,10 @@ class AddHabitFragment : Fragment(R.layout.fragment_add_habit),
             layoutManager =
                 GridLayoutManager(requireContext(), 3, GridLayoutManager.VERTICAL, false)
             setHasFixedSize(false)
+        }
+        _binding.alarmRecyclerView.apply {
+            adapter = alarmAdapter
+            layoutManager = LinearLayoutManager(requireContext())
         }
     }
 
@@ -331,6 +347,22 @@ class AddHabitFragment : Fragment(R.layout.fragment_add_habit),
             { _, hourOfDay, minute ->
                 selectedTime = "$hourOfDay:$minute"
                 _binding.timeTv.text = "${getString(R.string.time)} $selectedTime"
+                val calendar: Calendar =
+                    Calendar.getInstance(Locale.getDefault()).apply {
+                        set(Calendar.HOUR_OF_DAY, hourOfDay)
+                        set(Calendar.MINUTE, minute)
+                    }
+                alarmList.add(
+                    AlarmItem(
+                        uuid = randomId(),
+                        time = calendar.timeInMillis,
+                        message = _binding.habitNameInputLayout.editText?.text?.toString()!!,
+                        is_mute = false,
+                        habit_id = habitId!!
+                    )
+                )
+                println(alarmList)
+                alarmAdapter.submitList(alarmList.toList())
             },
             hour,
             minute,
@@ -352,21 +384,25 @@ class AddHabitFragment : Fragment(R.layout.fragment_add_habit),
                 }
             } else {
                 createNotificationsChannels()
-                RemindersManager.startReminder(
+                // TODO
+
+                /*RemindersManager.startReminder(
                     requireContext(),
                     reminderTime = selectedTime!!,
                     reminderId = id,
                     message = _binding.habitNameInputLayout.editText?.text?.toString()!!
-                )
+                )*/
             }
         } else {
             createNotificationsChannels()
-            RemindersManager.startReminder(
+            // TODO
+
+            /*RemindersManager.startReminder(
                 requireContext(),
                 reminderTime = selectedTime!!,
                 reminderId = id,
                 message = _binding.habitNameInputLayout.editText?.text?.toString()!!
-            )
+            )*/
         }
     }
 
@@ -382,6 +418,15 @@ class AddHabitFragment : Fragment(R.layout.fragment_add_habit),
         }
         ContextCompat.getSystemService(requireContext(), NotificationManager::class.java)
             ?.createNotificationChannel(channel)
+    }
+
+    override fun update(item: AlarmItem) {
+
+    }
+
+    override fun delete(item: AlarmItem) {
+        alarmList.remove(item)
+        alarmAdapter.submitList(alarmList)
     }
 
     override fun onStart() {

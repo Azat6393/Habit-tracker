@@ -1,10 +1,11 @@
-package com.woynapp.wontto.domain.model
+package com.woynapp.wontto.data.local.dto
 
 import androidx.room.Embedded
 import androidx.room.Relation
-import com.woynapp.wontto.data.local.dto.AlarmItemDto
+import com.woynapp.wontto.domain.model.DayInfo
+import com.woynapp.wontto.domain.model.Habit
 
-data class HabitWithDays(
+data class HabitWithDaysDto(
     @Embedded val habit: Habit,
     @Relation(
         parentColumn = "uuid",
@@ -13,5 +14,5 @@ data class HabitWithDays(
     @Relation(
         parentColumn = "uuid",
         entityColumn = "habit_id"
-    ) val alarmsDto: List<AlarmItem>
+    ) val alarmsDto: List<AlarmItemDto>
 )

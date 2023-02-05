@@ -74,28 +74,21 @@ class HabitDetailsFragment : Fragment(R.layout.fragment_habit_details) {
             AlertDetailsDialog(currentHabit?.habit!!,
                 alertOff = {
                     currentHabit?.habit?.id?.let {
-                        RemindersManager.stopReminder(
+                        // TODO
+
+                        /*RemindersManager.stopReminder(
                             requireContext(),
                             it
-                        )
+                        )*/
                     }
-                    viewModel.updateHabit(
-                        currentHabit!!.habit.copy(
-                            alert_on = false
-                        )
-                    )
                 },
                 alertOn = { time ->
                     alertOn(time)
-                    viewModel.updateHabit(
-                        currentHabit!!.habit.copy(
-                            alert_on = true,
-                            alert_time = time
-                        )
-                    )
+
                 },
                 changeAlertTime = { time ->
-                    if (currentHabit?.habit?.alert_on == true) {
+                    // TODO
+                    /*if (currentHabit?.habit?.alert_on == true) {
                         currentHabit?.habit?.id?.let {
                             RemindersManager.stopReminder(
                                 requireContext(),
@@ -107,7 +100,7 @@ class HabitDetailsFragment : Fragment(R.layout.fragment_habit_details) {
                         currentHabit!!.habit.copy(
                             alert_time = time
                         )
-                    )
+                    )*/
                 }
             ).show(childFragmentManager, "AlertDetailsDialog")
         }
@@ -158,7 +151,8 @@ class HabitDetailsFragment : Fragment(R.layout.fragment_habit_details) {
                         getString(R.string.delete_habit_message)
                     ) {
                         currentHabit?.let {
-                            RemindersManager.stopReminder(requireContext(), it.habit.id!!)
+                            // TODO
+                            //RemindersManager.stopReminder(requireContext(), it.habit.id!!)
                             viewModel.deleteHabit(habit = it.habit)
                         }
                         findNavController().popBackStack()
@@ -181,21 +175,25 @@ class HabitDetailsFragment : Fragment(R.layout.fragment_habit_details) {
                     }
                 } else {
                     createNotificationsChannels()
-                    RemindersManager.startReminder(
-                        requireContext(),
-                        reminderTime = time,
-                        reminderId = currentHabit?.habit?.id!!,
-                        currentHabit!!.habit.name
-                    )
+                    // TODO
+
+                    /* RemindersManager.startReminder(
+                         requireContext(),
+                         reminderTime = time,
+                         reminderId = currentHabit?.habit?.id!!,
+                         currentHabit!!.habit.name
+                     )*/
                 }
             } else {
                 createNotificationsChannels()
-                RemindersManager.startReminder(
+                // TODO
+
+                /*RemindersManager.startReminder(
                     requireContext(),
                     reminderTime = time,
                     reminderId = it,
                     currentHabit!!.habit.name
-                )
+                )*/
             }
         }
     }
@@ -281,9 +279,7 @@ class HabitDetailsFragment : Fragment(R.layout.fragment_habit_details) {
                         _binding.descriptionTv.text = it.habit.description
                         mAdapter.submitList(result.days)
                         currentHabit = it
-                        _binding.timeTv.text =
-                            if (result.habit.alert_on) getString(R.string.alertOn)
-                            else getString(R.string.alertOff)
+
                     }
                 }
             }

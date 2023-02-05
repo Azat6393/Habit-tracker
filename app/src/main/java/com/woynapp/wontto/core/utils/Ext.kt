@@ -5,7 +5,11 @@ import android.content.pm.PackageManager
 import android.widget.Toast
 import androidx.core.content.ContextCompat
 import com.google.gson.Gson
+import com.woynapp.wontto.data.local.dto.AlarmItemDto
+import com.woynapp.wontto.data.local.dto.HabitWithDaysDto
+import com.woynapp.wontto.domain.model.AlarmItem
 import com.woynapp.wontto.domain.model.Emoji
+import com.woynapp.wontto.domain.model.HabitWithDays
 import com.woynapp.wontto.domain.model.Motivation
 
 
@@ -42,4 +46,34 @@ fun Context.checkPermission(permission: String): Int {
         return 0
     }
     return -1
+}
+
+fun AlarmItemDto.toAlarmItem(): AlarmItem {
+    return AlarmItem(
+        id = id,
+        uuid = uuid,
+        message = message,
+        time = time,
+        is_mute = is_mute,
+        habit_id = habit_id
+    )
+}
+
+fun AlarmItem.toAlarmItemDto(): AlarmItemDto {
+    return AlarmItemDto(
+        id = id,
+        uuid = uuid,
+        message = message,
+        time = time,
+        is_mute = is_mute,
+        habit_id = habit_id
+    )
+}
+
+fun HabitWithDaysDto.toHabitWithDays(): HabitWithDays {
+    return HabitWithDays(
+        habit = habit,
+        days = days,
+        alarmsDto = alarmsDto.map { it.toAlarmItem() }
+    )
 }

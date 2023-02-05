@@ -1,10 +1,10 @@
 package com.woynapp.wontto.data.repository
 
 import com.woynapp.wontto.data.local.HabitDao
+import com.woynapp.wontto.data.local.dto.HabitWithDaysDto
 import com.woynapp.wontto.domain.model.Category
 import com.woynapp.wontto.domain.model.DayInfo
 import com.woynapp.wontto.domain.model.Habit
-import com.woynapp.wontto.domain.model.HabitWithDays
 import com.woynapp.wontto.domain.repository.HabitRepository
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
@@ -61,11 +61,11 @@ class HabitRepositoryImpl @Inject constructor(
         dao.deleteAllDaysInfo(uuid)
     }
 
-    override fun getHabitWithDays(id: Int): Flow<HabitWithDays> {
+    override fun getHabitWithDays(id: Int): Flow<HabitWithDaysDto> {
         return dao.getHabitWithDays(id)
     }
 
-    override fun getAllHabitWithDays(): Flow<List<HabitWithDays>>{
+    override fun getAllHabitWithDays(): Flow<List<HabitWithDaysDto>>{
         return dao.getAllHabitWithDays()
     }
 

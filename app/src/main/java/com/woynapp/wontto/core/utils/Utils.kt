@@ -1,5 +1,6 @@
 package com.woynapp.wontto.core.utils
 
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.app.AlertDialog
 import android.content.Context
@@ -9,7 +10,8 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import com.google.android.material.snackbar.Snackbar
 import com.woynapp.wontto.R
-
+import java.text.SimpleDateFormat
+import java.util.*
 
 
 fun showAlertDialog(
@@ -80,4 +82,17 @@ fun getJsonFromAssets(context: Context, fileName: String): String? {
         return null
     }
     return jsonString
+}
+
+
+@SuppressLint("SimpleDateFormat")
+fun parseHourAndMinute(date: Long): String {
+    val formatter = SimpleDateFormat("k:mm")
+    val calendar: Calendar = Calendar.getInstance()
+    calendar.timeInMillis = date
+    return formatter.format(calendar.time)
+}
+
+fun randomId(): Int {
+    return (0..999999).random()
 }
