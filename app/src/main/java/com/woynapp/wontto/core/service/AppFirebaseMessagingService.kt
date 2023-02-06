@@ -43,41 +43,27 @@ class AppFirebaseMessagingService : FirebaseMessagingService() {
 
 
         notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            notificationChannel = NotificationChannel(
-                CHANNEL_ID,
-                "${getString(R.string.app_name)} notification",
-                NotificationManager.IMPORTANCE_HIGH
-            )
-            notificationChannel.enableLights(true)
-            notificationChannel.lightColor = Color.GREEN
-            notificationChannel.enableVibration(false)
-            notificationManager.createNotificationChannel(notificationChannel)
+        notificationChannel = NotificationChannel(
+            CHANNEL_ID,
+            "${getString(R.string.app_name)} notification",
+            NotificationManager.IMPORTANCE_HIGH
+        )
+        notificationChannel.enableLights(true)
+        notificationChannel.lightColor = Color.GREEN
+        notificationChannel.enableVibration(false)
+        notificationManager.createNotificationChannel(notificationChannel)
 
-            builder = Notification.Builder(this, CHANNEL_ID)
-                .setSmallIcon(R.drawable.ic_launcher_background)
-                .setContentTitle(title)
-                .setContentText(text)
-                .setLargeIcon(
-                    BitmapFactory.decodeResource(
-                        this.resources,
-                        R.drawable.ic_launcher_background
-                    )
+        builder = Notification.Builder(this, CHANNEL_ID)
+            .setSmallIcon(R.drawable.ic_launcher_background)
+            .setContentTitle(title)
+            .setContentText(text)
+            .setLargeIcon(
+                BitmapFactory.decodeResource(
+                    this.resources,
+                    R.drawable.ic_launcher_background
                 )
-                .setContentIntent(pendingIntent)
-        } else {
-            builder = Notification.Builder(this)
-                .setSmallIcon(R.drawable.ic_launcher_background)
-                .setContentTitle(title)
-                .setContentText(text)
-                .setLargeIcon(
-                    BitmapFactory.decodeResource(
-                        this.resources,
-                        R.drawable.ic_launcher_background
-                    )
-                )
-                .setContentIntent(pendingIntent)
-        }
+            )
+            .setContentIntent(pendingIntent)
         notificationManager.notify(1, builder.build())
     }
 

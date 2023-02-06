@@ -1,5 +1,10 @@
 package com.woynapp.wontto.domain.repository
 
+import androidx.room.Delete
+import androidx.room.Insert
+import androidx.room.OnConflictStrategy
+import androidx.room.Update
+import com.woynapp.wontto.data.local.dto.AlarmItemDto
 import com.woynapp.wontto.data.local.dto.HabitWithDaysDto
 import com.woynapp.wontto.domain.model.Category
 import com.woynapp.wontto.domain.model.DayInfo
@@ -24,4 +29,7 @@ interface HabitRepository {
     fun getAllHabitWithDays(): Flow<List<HabitWithDaysDto>>
     suspend fun deleteCategory(category: Category)
     fun getHabitByUUID(uuid: String): Flow<Habit>
+    suspend fun insertAlarmItem(item: AlarmItemDto)
+    suspend fun deleteAlarmItem(item: AlarmItemDto)
+    suspend fun updateAlarmItem(item: AlarmItemDto)
 }

@@ -1,6 +1,7 @@
 package com.woynapp.wontto.data.repository
 
 import com.woynapp.wontto.data.local.HabitDao
+import com.woynapp.wontto.data.local.dto.AlarmItemDto
 import com.woynapp.wontto.data.local.dto.HabitWithDaysDto
 import com.woynapp.wontto.domain.model.Category
 import com.woynapp.wontto.domain.model.DayInfo
@@ -75,5 +76,17 @@ class HabitRepositoryImpl @Inject constructor(
 
     override fun getHabitByUUID(uuid: String): Flow<Habit> {
         return dao.getHabitByUUID(uuid)
+    }
+
+    override suspend fun insertAlarmItem(item: AlarmItemDto) {
+        dao.insertAlarmItem(item)
+    }
+
+    override suspend fun deleteAlarmItem(item: AlarmItemDto) {
+        dao.deleteAlarmItem(item)
+    }
+
+    override suspend fun updateAlarmItem(item: AlarmItemDto) {
+        dao.updateAlarmItem(item)
     }
 }

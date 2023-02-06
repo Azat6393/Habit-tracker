@@ -2,6 +2,9 @@ package com.woynapp.wontto.presentation.add_habit
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.woynapp.wontto.core.notification.RemindersManager
+import com.woynapp.wontto.core.utils.toAlarmItemDto
+import com.woynapp.wontto.domain.model.AlarmItem
 import com.woynapp.wontto.domain.model.Category
 import com.woynapp.wontto.domain.model.DayInfo
 import com.woynapp.wontto.domain.model.Habit
@@ -14,7 +17,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class AddHabitViewModel @Inject constructor(
-    private val repo: HabitRepository
+    private val repo: HabitRepository,
+    private val remindersManager: RemindersManager
 ) : ViewModel() {
 
     private val _categories = MutableStateFlow<List<Category>>(emptyList())
@@ -27,10 +31,8 @@ class AddHabitViewModel @Inject constructor(
         getAllCategory()
     }
 
-    fun addHabit(habit: Habit) = viewModelScope.launch {
+    fun addHabit(habit: Habit, alarmList: List<AlarmItem>) = viewModelScope.launch {
         repo.insertHabit(habit).also {
-            getHabitByUUID(habit.uuid)
-        }.also {
             for (i in 1..habit.day_size) {
                 repo.insertDayInfo(
                     DayInfo(
@@ -40,10 +42,18 @@ class AddHabitViewModel @Inject constructor(
                     )
                 )
             }
+            alarmList.forEach { item ->
+                if (item.is_mute)
+                    remindersManager.stopReminder(item)
+                else remindersManager.startReminder(item)
+                repo.insertAlarmItem(item.toAlarmItemDto())
+            }
+        }.also {
+            getHabitByUUID(habit.uuid)
         }
     }
 
-    fun updateHabit(habit: Habit) = viewModelScope.launch {
+    fun updateHabit(habit: Habit, alarmList: List<AlarmItem>) = viewModelScope.launch {
         repo.updateHabit(habit).also {
             for (i in 1..habit.day_size) {
                 repo.insertDayInfo(
@@ -54,6 +64,14 @@ class AddHabitViewModel @Inject constructor(
                     )
                 )
             }
+            alarmList.forEach { item ->
+                if (item.is_mute)
+                    remindersManager.stopReminder(item)
+                else remindersManager.startReminder(item)
+                repo.insertAlarmItem(item.toAlarmItemDto())
+            }
+        }.also {
+            getHabitByUUID(habit.uuid)
         }
     }
 

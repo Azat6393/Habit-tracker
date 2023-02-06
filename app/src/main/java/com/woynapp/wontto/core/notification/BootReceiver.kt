@@ -5,8 +5,15 @@ import android.content.Context
 import android.content.Intent
 import com.woynapp.wontto.R
 import com.woynapp.wontto.domain.model.AlarmItem
+import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
+@AndroidEntryPoint
 class BootReceiver : BroadcastReceiver() {
+
+    @Inject
+    lateinit var remindersManager: RemindersManager
+
     override fun onReceive(context: Context, intent: Intent) {
         if (intent.action == "android.intent.action.BOOT_COMPLETED") {
             val id = intent.getIntExtra("reminder_id", 0)
@@ -22,7 +29,7 @@ class BootReceiver : BroadcastReceiver() {
                 is_mute = is_mute,
                 habit_id = habit_id
             )
-            RemindersManager.startReminder(context, item)
+            remindersManager.startReminder(item)
         }
     }
 }

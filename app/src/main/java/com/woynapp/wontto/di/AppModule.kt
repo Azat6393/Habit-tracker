@@ -9,6 +9,7 @@ import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.emptyPreferences
 import androidx.datastore.preferences.preferencesDataStoreFile
 import androidx.room.Room
+import com.woynapp.wontto.core.notification.RemindersManager
 import com.woynapp.wontto.data.local.HabitDao
 import com.woynapp.wontto.data.local.HabitDatabase
 import com.woynapp.wontto.data.repository.HabitRepositoryImpl
@@ -66,5 +67,11 @@ object AppModule {
             scope = CoroutineScope(Dispatchers.IO + SupervisorJob()),
             produceFile = { appContext.preferencesDataStoreFile("aliskanlik_preferences") }
         )
+    }
+
+    @Provides
+    @Singleton
+    fun provideReminderManager(@ApplicationContext context: Context): RemindersManager {
+        return RemindersManager(context)
     }
 }

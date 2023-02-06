@@ -2,7 +2,10 @@ package com.woynapp.wontto.presentation.habit_dateils
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.woynapp.wontto.core.notification.RemindersManager
+import com.woynapp.wontto.core.utils.toAlarmItemDto
 import com.woynapp.wontto.core.utils.toHabitWithDays
+import com.woynapp.wontto.domain.model.AlarmItem
 import com.woynapp.wontto.domain.model.DayInfo
 import com.woynapp.wontto.domain.model.Habit
 import com.woynapp.wontto.domain.model.HabitWithDays
@@ -17,7 +20,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class HabitDetailViewModel @Inject constructor(
-    private val repo: HabitRepository
+    private val repo: HabitRepository,
+    private val remindersManager: RemindersManager
 ) : ViewModel() {
 
     private val _habit = MutableStateFlow<HabitWithDays?>(null)
@@ -29,6 +33,25 @@ class HabitDetailViewModel @Inject constructor(
         }.launchIn(viewModelScope)
     }
 
+    fun updateAlertItem(item: AlarmItem) = viewModelScope.launch {
+        if (item.is_mute)
+            remindersManager.stopReminder(item)
+        else remindersManager.startReminder(item)
+        repo.updateAlarmItem(item.toAlarmItemDto())
+    }
+
+    fun deleteAlertItem(item: AlarmItem) = viewModelScope.launch {
+        remindersManager.stopReminder(item)
+        repo.deleteAlarmItem(item.toAlarmItemDto())
+    }
+
+    fun insertAlertItem(item: AlarmItem) = viewModelScope.launch {
+        if (item.is_mute)
+            remindersManager.stopReminder(item)
+        else remindersManager.startReminder(item)
+        repo.insertAlarmItem(item.toAlarmItemDto())
+    }
+
     fun updateHabit(habit: Habit) = viewModelScope.launch {
         repo.updateHabit(habit)
     }
@@ -37,8 +60,13 @@ class HabitDetailViewModel @Inject constructor(
         repo.updateDayInfo(dayInfo)
     }
 
-    fun deleteHabit(habit: Habit) = viewModelScope.launch {
-        repo.deleteHabit(habit).also { repo.deleteAllDaysInfo(habit.uuid) }
+    fun deleteHabit(habit: HabitWithDays) = viewModelScope.launch {
+        repo.deleteHabit(habit.habit).also {
+            repo.deleteAllDaysInfo(habit.habit.uuid)
+            habit.alarmsDto.forEach {
+                repo.deleteAlarmItem(it.toAlarmItemDto())
+            }
+        }
     }
 
     fun restartHabit(habit: HabitWithDays) = viewModelScope.launch {

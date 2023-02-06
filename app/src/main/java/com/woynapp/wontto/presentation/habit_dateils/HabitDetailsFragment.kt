@@ -72,36 +72,7 @@ class HabitDetailsFragment : Fragment(R.layout.fragment_habit_details) {
     private fun initAlertBtn() {
         _binding.alertBtn.setOnClickListener {
             AlertDetailsDialog(currentHabit?.habit!!,
-                alertOff = {
-                    currentHabit?.habit?.id?.let {
-                        // TODO
-
-                        /*RemindersManager.stopReminder(
-                            requireContext(),
-                            it
-                        )*/
-                    }
-                },
-                alertOn = { time ->
-                    alertOn(time)
-
-                },
-                changeAlertTime = { time ->
-                    // TODO
-                    /*if (currentHabit?.habit?.alert_on == true) {
-                        currentHabit?.habit?.id?.let {
-                            RemindersManager.stopReminder(
-                                requireContext(),
-                                it
-                            ).also { alertOn(time) }
-                        }
-                    }
-                    viewModel.updateHabit(
-                        currentHabit!!.habit.copy(
-                            alert_time = time
-                        )
-                    )*/
-                }
+                viewModel
             ).show(childFragmentManager, "AlertDetailsDialog")
         }
     }
@@ -151,9 +122,7 @@ class HabitDetailsFragment : Fragment(R.layout.fragment_habit_details) {
                         getString(R.string.delete_habit_message)
                     ) {
                         currentHabit?.let {
-                            // TODO
-                            //RemindersManager.stopReminder(requireContext(), it.habit.id!!)
-                            viewModel.deleteHabit(habit = it.habit)
+                            viewModel.deleteHabit(habit = it)
                         }
                         findNavController().popBackStack()
                     }

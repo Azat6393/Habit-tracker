@@ -113,4 +113,7 @@
     <string name="off">Выкл</string>
     <string name="add">Добавить</string>
 
+    <string name="add_alarm">Добавить Уведомление</string>
+    <string name="post_notification_message">Без разрешения приложение не может вас оповещать</string>
+
 </resources>

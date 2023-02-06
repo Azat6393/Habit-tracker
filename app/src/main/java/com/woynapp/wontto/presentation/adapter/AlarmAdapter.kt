@@ -66,7 +66,7 @@ class AlarmAdapter constructor(
                             },
                             hour,
                             minute,
-                            false
+                            true
                         )
                         timePickerDialog.show()
                     }

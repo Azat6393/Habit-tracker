@@ -1,7 +1,10 @@
 package com.woynapp.wontto
 
 import android.app.Application
+import android.app.NotificationChannel
+import android.app.NotificationManager
 import android.content.Context
+import android.os.Build
 import android.util.Log
 import androidx.appcompat.app.AppCompatDelegate
 import com.google.android.gms.tasks.OnCompleteListener
@@ -26,6 +29,13 @@ class BaseApplication : Application(){
             AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
             setTheme(R.style.Theme_Aliskanlik_Light)
         }
+        val channel = NotificationChannel(
+            getString(R.string.reminders_notification_channel_id),
+            getString(R.string.reminders_notification_channel_name),
+            NotificationManager.IMPORTANCE_HIGH
+        )
+        val notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+        notificationManager.createNotificationChannel(channel)
 
         FirebaseMessaging.getInstance().subscribeToTopic("allDevices")
 

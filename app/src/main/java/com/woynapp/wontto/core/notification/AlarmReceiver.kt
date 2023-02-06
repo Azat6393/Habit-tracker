@@ -1,74 +1,59 @@
 package com.woynapp.wontto.core.notification
 
+import android.app.Notification
+import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.PendingIntent
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
+import android.graphics.BitmapFactory
+import android.graphics.Color
 import android.os.Build
-import androidx.core.app.NotificationCompat
-import androidx.core.content.ContextCompat
 import com.woynapp.wontto.R
-import com.woynapp.wontto.domain.model.AlarmItem
-import com.woynapp.wontto.presentation.MainActivity
 
 class AlarmReceiver : BroadcastReceiver() {
 
+    lateinit var notificationManager: NotificationManager
+    lateinit var notificationChannel: NotificationChannel
+    private lateinit var builder: Notification.Builder
+
     override fun onReceive(context: Context, intent: Intent) {
-        val notificationManager = ContextCompat.getSystemService(
-            context,
-            NotificationManager::class.java
-        ) as NotificationManager
 
         val message = intent.getStringExtra("message")
             ?: context.getString(R.string.description_notification_reminder)
-        notificationManager.sendReminderNotification(
-            applicationContext = context,
-            channelId = context.getString(R.string.reminders_notification_channel_id),
-            message
-        )
-        val id = intent.getIntExtra("reminder_id", 0)
-        val time = intent.getLongExtra("reminder_time", 0)
-        val isMute = intent.getBooleanExtra("reminder_is_mute", false)
-        val habitId = intent.getStringExtra("reminder_habit_id") ?: ""
-        RemindersManager.startReminder(
-            context = context.applicationContext,
-            item = AlarmItem(
-                uuid = id,
-                message = message,
-                time = time,
-                is_mute = isMute,
-                habit_id = habitId
+        val uuid = intent.getIntExtra("uuid", 0)
+
+        val pendingIntent =
+            PendingIntent.getActivity(
+                context, 0, intent,
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) PendingIntent.FLAG_MUTABLE
+                else PendingIntent.FLAG_UPDATE_CURRENT
             )
+
+        notificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+        notificationChannel = NotificationChannel(
+            context.getString(R.string.reminders_notification_channel_id),
+            context.getString(R.string.reminders_notification_channel_name),
+            NotificationManager.IMPORTANCE_HIGH
         )
+        notificationChannel.enableLights(true)
+        notificationChannel.lightColor = Color.GREEN
+        notificationChannel.enableVibration(false)
+        notificationManager.createNotificationChannel(notificationChannel)
+
+        builder = Notification.Builder(context, context.getString(R.string.reminders_notification_channel_id))
+            .setSmallIcon(R.drawable.ic_launcher_background)
+            .setContentTitle(context.getString(R.string.app_name))
+            .setContentText(message)
+            .setLargeIcon(
+                BitmapFactory.decodeResource(
+                    context.resources,
+                    R.drawable.ic_launcher_background
+                )
+            )
+            .setContentIntent(pendingIntent)
+        notificationManager.notify(1, builder.build())
     }
 }
 
-fun NotificationManager.sendReminderNotification(
-    applicationContext: Context,
-    channelId: String,
-    message: String
-) {
-    val contentIntent = Intent(applicationContext, MainActivity::class.java)
-    val pendingIntent = PendingIntent.getActivity(
-        applicationContext,
-        1,
-        contentIntent,
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) PendingIntent.FLAG_MUTABLE
-        else PendingIntent.FLAG_UPDATE_CURRENT
-    )
-    val builder = NotificationCompat.Builder(applicationContext, channelId)
-        .setContentTitle(applicationContext.getString(R.string.title_notification_reminder))
-        .setContentText(message)
-        .setSmallIcon(R.drawable.notification)
-        .setStyle(
-            NotificationCompat.BigTextStyle()
-                .bigText(message)
-        )
-        .setContentIntent(pendingIntent)
-        .setAutoCancel(true)
-
-    notify(NOTIFICATION_ID, builder.build())
-}
-
-const val NOTIFICATION_ID = 1

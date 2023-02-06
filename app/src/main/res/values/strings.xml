@@ -112,5 +112,7 @@
     <string name="on">On</string>
     <string name="off">Off</string>
     <string name="add">Add</string>
+    <string name="add_alarm">Add Alarm</string>
+    <string name="post_notification_message">Without permission app cannot alert you</string>
 
 </resources>

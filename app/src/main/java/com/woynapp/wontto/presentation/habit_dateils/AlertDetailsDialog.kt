@@ -1,33 +1,58 @@
 package com.woynapp.wontto.presentation.habit_dateils
 
+import android.Manifest
 import android.annotation.SuppressLint
 import android.app.TimePickerDialog
+import android.content.pm.PackageManager
 import android.graphics.Color
+import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
 import android.widget.Toast
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.DialogFragment
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
+import com.google.android.material.snackbar.Snackbar
 import com.woynapp.wontto.R
+import com.woynapp.wontto.core.utils.randomId
 import com.woynapp.wontto.core.utils.showToastMessage
 import com.woynapp.wontto.databinding.DialogAlertBinding
+import com.woynapp.wontto.domain.model.AlarmItem
 import com.woynapp.wontto.domain.model.Habit
+import com.woynapp.wontto.presentation.adapter.AlarmAdapter
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.launch
 import java.util.*
 
 
 class AlertDetailsDialog(
     private val habit: Habit,
-    private val alertOn: (String) -> Unit,
-    private val alertOff: () -> Unit,
-    private val changeAlertTime: (String) -> Unit
-) : DialogFragment() {
+    private val viewModel: HabitDetailViewModel
+) : DialogFragment(), AlarmAdapter.OnItemClickListener {
 
     private lateinit var _binding: DialogAlertBinding
-    private var selectedTime: String? = null
-    private var alertState = false
+    private val mAdapter: AlarmAdapter by lazy { AlarmAdapter(this) }
+
+    private val permissionLauncher =
+        registerForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted ->
+            if (!isGranted) {
+                Snackbar.make(
+                    requireView(),
+                    getString(R.string.post_notification_message),
+                    Snackbar.LENGTH_LONG
+                ).show()
+            } else {
+                showTimePicker()
+            }
+        }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -41,40 +66,39 @@ class AlertDetailsDialog(
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         _binding = DialogAlertBinding.bind(view)
-        //alertState = habit.alert_on
         _binding.apply {
-            //selectedTime = habit.alert_time
-            setTimeText()
             closeBtn.setOnClickListener { this@AlertDetailsDialog.dismiss() }
-           /* alertBtn.text =
-                if (habit.alert_on) getString(R.string.off)
-                else getString(R.string.on)
-            alertBtn.setTextColor(
-                if (habit.alert_on) Color.parseColor("#FF5151")
-                else Color.parseColor("#08D500")
-            )*/
-            alertBtn.setOnClickListener {
-                if (alertState) {
-                    alertOff()
-                    alertBtn.text = getString(R.string.on)
-                    alertBtn.setTextColor(Color.parseColor("#08D500"))
-                    _binding.timeTv.text = "${getString(R.string.close)} - $selectedTime"
-                    alertState = false
-                } else {
-                    if (selectedTime.isNullOrBlank()) {
-                        requireContext().showToastMessage(
-                            getString(R.string.select_time_message)
-                        )
+            addBtn.setOnClickListener {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                    if (ContextCompat.checkSelfPermission(
+                            requireContext(),
+                            Manifest.permission.POST_NOTIFICATIONS
+                        ) == PackageManager.PERMISSION_GRANTED
+                    ) {
+                        showTimePicker()
                     } else {
-                        alertOn(selectedTime!!)
-                        alertBtn.text = getString(R.string.off)
-                        alertBtn.setTextColor(Color.parseColor("#FF5151"))
-                        _binding.timeTv.text = "${getString(R.string.open)} - $selectedTime"
-                        alertState = true
+                        permissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)
                     }
+                } else {
+                    showTimePicker()
                 }
             }
-            timeCtn.setOnClickListener { showTimePicker() }
+            recyclerView.apply {
+                adapter = mAdapter
+                layoutManager = LinearLayoutManager(requireContext())
+            }
+        }
+        viewModel.getHabitById(habit.id!!)
+        observe()
+    }
+
+    private fun observe() {
+        lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.habit.collect { result ->
+                    mAdapter.submitList(result?.alarmsDto)
+                }
+            }
         }
     }
 
@@ -85,21 +109,35 @@ class AlertDetailsDialog(
         val timePickerDialog = TimePickerDialog(
             requireContext(),
             { _, hourOfDay, minute ->
-                selectedTime = "$hourOfDay:$minute"
-                setTimeText()
-                changeAlertTime(selectedTime!!)
+                val calendar: Calendar =
+                    Calendar.getInstance(Locale.getDefault()).apply {
+                        set(Calendar.HOUR_OF_DAY, hourOfDay)
+                        set(Calendar.MINUTE, minute)
+                    }
+
+                viewModel.insertAlertItem(
+                    AlarmItem(
+                        uuid = randomId(),
+                        time = calendar.timeInMillis,
+                        message = habit.name,
+                        is_mute = false,
+                        habit_id = habit.uuid
+                    )
+                )
             },
             hour,
             minute,
-            false
+            true
         )
         timePickerDialog.show()
     }
 
-    private fun setTimeText() {
-        /*_binding.timeTv.text =
-            if (habit.alert_on) "${getString(R.string.open)} - $selectedTime"
-            else "${getString(R.string.close)} - $selectedTime"*/
+    override fun update(item: AlarmItem) {
+        viewModel.updateAlertItem(item)
+    }
+
+    override fun delete(item: AlarmItem) {
+        viewModel.deleteAlertItem(item)
     }
 
     override fun onStart() {
@@ -114,5 +152,4 @@ class AlertDetailsDialog(
         super.onCreate(savedInstanceState)
         setStyle(DialogFragment.STYLE_NORMAL, R.style.CustomBottomSheetDialogTheme);
     }
-
 }

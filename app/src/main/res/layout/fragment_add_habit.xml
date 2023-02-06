@@ -88,7 +88,7 @@
 
         </com.google.android.material.textfield.TextInputLayout>
 
-        <com.google.android.material.textfield.TextInputLayout
+        aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa<com.google.android.material.textfield.TextInputLayout
             android:id="@+id/habitDescriptionInputLayout"
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="0dp"
@@ -266,7 +266,7 @@
                         android:layout_marginEnd="20dp"
                         android:layout_marginBottom="8dp"
                         android:maxLines="1"
-                        android:text="@string/time"
+                        android:text="@string/add_alarm"
                         android:textColor="@color/white"
                         android:textSize="15sp" />
 
